@@ -38,7 +38,7 @@ object robotRojo {
     }
 
     method agachar(){
-        imagenActual = "RobotRojoAgachar.png"
+        imagenActual = "RobotRojoAgacharTest1.png"
         game.schedule(1500,{self.neutro()})
     }
 
@@ -48,7 +48,7 @@ object robotRojo {
     }
 
     method bloquear(){
-        imagenActual = "RobotRojoBloquea.png"
+        imagenActual = "RobotRojoBloquearTest1.png"
         game.schedule(1500,{self.neutro()})
     }
 
@@ -76,7 +76,7 @@ object robotAzul {
     }
 
     method agachar(){
-        imagenActual = "RobotAzulAgachar.png"
+        imagenActual = "RobotAzulAgacharTest1.png"
         game.schedule(1500,{self.neutro()})
     }
 
@@ -86,7 +86,7 @@ object robotAzul {
     }
 
     method bloquear(){
-        imagenActual = "RobotAzulBloquear.png"
+        imagenActual = "RobotAzulBloquearTest1.png"
         game.schedule(1500,{self.neutro()})
     }
 
