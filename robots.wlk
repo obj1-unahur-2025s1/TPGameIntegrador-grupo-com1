@@ -10,6 +10,7 @@ object robotRojo {
     var posicionRojo = game.at(1,1)
     var imagenActual = "RobotRojoNeutroTest1.png"
     var posicion = "neutro"
+    var estaDerrotado = false
     const sensor = sensorR
 
     method position() = posicionRojo
@@ -24,6 +25,15 @@ object robotRojo {
     method neutro(){
         posicion = "neutro"
         imagenActual = "RobotRojoNeutroTest1.png"      
+    }
+
+    method derrotado() {
+    if (!estaDerrotado) {
+        estaDerrotado = true
+        posicion = "derrotado"
+        imagenActual = "RobotRojoDerrotado.png" // o Azul
+        game.schedule(1000, { game.stop() })  
+    }
     }
 
     method agachar(){
@@ -79,7 +89,7 @@ object robotRojo {
 
     method bajarSalud(){
         if (posicion == "neutro" || posicion == "golpeando") {
-            salud -= 2.max(0)
+            salud -= 10.max(0)
         } else if (posicion == "agachado") {
             salud -= 0 // Si está agachado, no recibe daño
         } else if (posicion == "bloqueando") {
@@ -100,6 +110,7 @@ object robotAzul {
     var posicionAzul = game.at(22,1)
     var imagenActual = "RobotAzulNeutroTest1.png"
     var posicion = "neutro"
+    var estaDerrotado = false
     const sensor = sensorA
 
     method position() = posicionAzul
@@ -115,6 +126,16 @@ object robotAzul {
         posicion = "neutro"
         imagenActual = "RobotAzulNeutroTest1.png"
     }
+
+    method derrotado() {
+    if (!estaDerrotado) {
+        estaDerrotado = true
+        posicion = "derrotado"
+        imagenActual = "RobotAzulDerrotado.png" // o Azul
+        game.schedule(1000, { game.stop() })  
+    }
+    }
+
     method agachar(){
         if (puedeAgachar) {
             puedeAgachar = false
@@ -247,6 +268,7 @@ object vidaRojo {
         }
         if (salud <= 0) {
             imagenActual = "Rojo0V2.png"
+            robotRojo.derrotado() // Si la salud llega a 0, el robot rojo es derrotado
         }
         return imagenActual
     }
@@ -299,6 +321,7 @@ object vidaAzul {
         }
         if (salud <= 0) {
             imagenActual = "Azul0V2.png"
+            robotAzul.derrotado() // Si la salud llega a 0, el robot azul es derrotado
         }
         return imagenActual
     }
