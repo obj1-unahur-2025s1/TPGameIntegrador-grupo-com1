@@ -3,19 +3,20 @@ import juego.*
 
 program JuegoX {
 
-    const anchoVentana = 2100  // Valor fijo o configurable
-    const altoVentana = 1000   // Valor fijo o configurable
-
-    const tamanoCelda = 50  // tamaño clásico
+    const anchoVentana = 1920
+    const altoVentana = 950
+    const tamanoCelda = 60
 
     // Calculo las celdas para que el tablero ocupe casi toda la pantalla
-    const celdasAncho = (anchoVentana / tamanoCelda).truncate(0) -1
-    const celdasAlto = (altoVentana / tamanoCelda).truncate(0) -1
+    const celdasAncho = (anchoVentana / tamanoCelda).truncate(0)  
+    const celdasAlto = (altoVentana / tamanoCelda).truncate(0)    
 
     game.width(celdasAncho)
     game.height(celdasAlto)
+
     game.cellSize(tamanoCelda)
-    game.title("JuegoX a pantalla completa")
+    game.title("Juego de Lucha")
+    game.boardGround("fondo2.jpg")
 
     juego.iniciar()
 	game.start()

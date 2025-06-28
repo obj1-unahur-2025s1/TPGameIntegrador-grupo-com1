@@ -14,12 +14,14 @@ object juego {
         if (!elemento.esRojo()) {
             sensorR.hayObstaculo(true)         
             //game.say(robotRojo, robotRojo.mensajeTest1())
+            game.schedule(100, { sensorR.hayObstaculo(false) })
         }
         })
         game.whenCollideDo(sensorA, { elemento =>
         if (!elemento.esAzul()) {
             sensorA.hayObstaculo(true)   
             //game.say(robotAzul, robotAzul.mensajeTest1())
+            game.schedule(100, { sensorA.hayObstaculo(false) })
         }})
 
         keyboard.q().onPressDo{robotRojo.bloquear()}
@@ -43,7 +45,7 @@ object robotRojo {
     var puedeGolpear = true
     var puedeAgachar = true
     var puedeBloquear = true      
-    var posicionRojo = game.origin()
+    var posicionRojo = game.at(1,1)
     var imagenActual = "RobotRojoNeutroTest1.png"
     const sensor = sensorR
 
@@ -53,7 +55,7 @@ object robotRojo {
 
     method hayAlgoALaDerecha() {    
         const proximaPosicion = posicionRojo.right(1)
-        sensorR.position(proximaPosicion)
+        sensor.position(proximaPosicion)
     }
 
     method neutro(){
@@ -72,7 +74,7 @@ object robotRojo {
         if (puedeGolpear) {
             puedeGolpear = false
             imagenActual = "RobotRojoGolpearTest1.png"       
-        if(sensorR.hayObstaculo()){
+        if(sensor.hayObstaculo()){
             robotAzul.bajarSalud()
             game.say(self, self.mensajeTest())
         }
@@ -90,18 +92,18 @@ object robotRojo {
     }
 
     method moverDerecha() {
-        if(!sensor.hayObstaculo()){
-            posicionRojo = posicionRojo.right(1)
-            self.hayAlgoALaDerecha()
-            game.schedule(300, { self.neutro() })
-        }
-        sensor.hayObstaculo(false)  
-        }
-    method moverIzquierda() {
-        posicionRojo = posicionRojo.left(1)
-        self.hayAlgoALaDerecha()  // Opcional si querés detectar hacia ese lado también
-        game.schedule(300, { self.neutro() })
+    if (!sensor.hayObstaculo()) {
+        posicionRojo = posicionRojo.right(1)
     }
+    self.hayAlgoALaDerecha()  // SIEMPRE actualizar el sensor
+    game.schedule(300, { self.neutro() })
+}
+
+    method moverIzquierda() {
+    posicionRojo = posicionRojo.left(1)
+    self.hayAlgoALaDerecha()  // Actualizá también al moverte hacia la izquierda
+    game.schedule(300, { self.neutro() })
+}
 
     method mensajeTest() = "Te golpe"
     method mensajeTest1() = "Hay algo en la proxima posicion der"
@@ -120,7 +122,7 @@ object robotAzul {
     var puedeGolpear = true
     var puedeAgachar = true
     var puedeBloquear = true     
-    var posicionAzul = game.at(20,0)
+    var posicionAzul = game.at(22,1)
     var imagenActual = "RobotAzulNeutroTest1.png"
     const sensor = sensorA
 
@@ -130,7 +132,7 @@ object robotAzul {
 
     method hayAlgoALaIzquierda() {    
         const proximaPosicion = posicionAzul.left(1)
-        sensorA.position(proximaPosicion)
+        sensor.position(proximaPosicion)
     }
 
     method neutro(){
@@ -166,19 +168,19 @@ object robotAzul {
         }                  
     }
 
-    method moverDerecha() {
-        posicionAzul = posicionAzul.right(1)
-        self.hayAlgoALaIzquierda()
-        game.schedule(300, {self.neutro()})
-    }
+    method moverDerecha() {   
+    posicionAzul = posicionAzul.right(1)  
+    self.hayAlgoALaIzquierda()  // SIEMPRE actualizar el sensor
+    game.schedule(300, { self.neutro() })
+}
+
     method moverIzquierda() {
-        if(!sensor.hayObstaculo()){
+        if (!sensor.hayObstaculo()){
             posicionAzul = posicionAzul.left(1)
-            self.hayAlgoALaIzquierda()
+            self.hayAlgoALaIzquierda()  // Actualizá también al moverte hacia la izquierda
             game.schedule(300, { self.neutro() })
         }
-        sensor.hayObstaculo(false)
-    }
+}
 
     method mensajeTest() = "Te golpe"
     method mensajeTest1() = "Hay algo en la proxima posicion izq"
@@ -202,7 +204,7 @@ object sensorR {
     method hayObstaculo() = hayObstaculo
     method hayObstaculo(estado) {
         hayObstaculo = estado
-    } // Sin imagen, así no se muestra
+    }
 }
 
 object sensorA {
@@ -216,7 +218,7 @@ object sensorA {
     method hayObstaculo() = hayObstaculo
     method hayObstaculo(estado) {
         hayObstaculo = estado
-    } // Sin imagen, así no se muestra
+    }
 }
 
 
