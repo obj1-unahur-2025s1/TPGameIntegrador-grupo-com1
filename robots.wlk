@@ -9,8 +9,8 @@ object robotRojo {
     var puedeBloquear = true      
     var posicionRojo = game.at(1,1)
     var imagenActual = "RobotRojoNeutroTest1.png"
-    var posicion = "neutro"
-    var estaDerrotado = false
+    var property posicion = "neutro"
+    var property estaDerrotado = false
     const sensor = sensorR
 
     method position() = posicionRojo
@@ -32,7 +32,7 @@ object robotRojo {
         estaDerrotado = true
         posicion = "derrotado"
         imagenActual = "RobotRojoDerrotado.png" // o Azul
-        game.schedule(1000, { game.stop() })  
+        game.schedule(1000, { juego.finDelJuego() })  
     }
     }
 
@@ -49,11 +49,17 @@ object robotRojo {
     method golpear(){       
         if (puedeGolpear) {
             puedeGolpear = false
-            posicion = "golpeando"            
-            imagenActual = "RobotRojoGolpearTest1.png"       
-        if(sensor.hayObstaculo()){
+            posicion = "golpeando"               
+        if(sensor.hayObstaculo()) {
             robotAzul.bajarSalud()
+            if (robotAzul.posicion() == "neutro" || robotAzul.posicion() == "bloqueando"){
+                imagenActual = "RobotRojoGolpearConEfecto.png" 
+            }else {
+                imagenActual = "RobotRojoGolpearTest1.png"
+            }
             //game.say(self, self.mensajeTest())
+        } else {
+            imagenActual = "RobotRojoGolpearTest1.png" // Si no hay obstáculo, vuelve a la imagen normal
         }
         game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
         game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
@@ -109,8 +115,8 @@ object robotAzul {
     var puedeBloquear = true     
     var posicionAzul = game.at(22,1)
     var imagenActual = "RobotAzulNeutroTest1.png"
-    var posicion = "neutro"
-    var estaDerrotado = false
+    var property posicion = "neutro"
+    var property estaDerrotado = false
     const sensor = sensorA
 
     method position() = posicionAzul
@@ -132,7 +138,7 @@ object robotAzul {
         estaDerrotado = true
         posicion = "derrotado"
         imagenActual = "RobotAzulDerrotado.png" // o Azul
-        game.schedule(1000, { game.stop() })  
+        game.schedule(1000, { juego.finDelJuego() })  
     }
     }
 
@@ -146,14 +152,20 @@ object robotAzul {
         }        
     }
 
-    method golpear(){
+    method golpear(){       
         if (puedeGolpear) {
-        puedeGolpear = false
-        posicion = "golpeando"
-        imagenActual = "RobotAzulGolpearTest3.png"       
-        if(sensor.hayObstaculo()){
+            puedeGolpear = false
+            posicion = "golpeando"               
+        if(sensor.hayObstaculo()) {
             robotRojo.bajarSalud()
+            if (robotRojo.posicion() == "neutro" || robotRojo.posicion() == "bloqueando"){
+                imagenActual = "RobotAzulGolpearConEfecto.png" 
+            }else {
+                imagenActual = "RobotAzulGolpearTest3.png"
+            }
             //game.say(self, self.mensajeTest())
+        } else {
+            imagenActual = "RobotRojoGolpearTest3.png" // Si no hay obstáculo, vuelve a la imagen normal
         }
         game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
         game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
@@ -188,7 +200,7 @@ object robotAzul {
 
     method bajarSalud(){
         if (posicion == "neutro" || posicion == "golpeando") {
-            salud -= 2.max(0)
+            salud -= 10.max(0)
         } else if (posicion == "agachado") {
             salud -= 0 // Si está agachado, no recibe daño
         } else if (posicion == "bloqueando") {

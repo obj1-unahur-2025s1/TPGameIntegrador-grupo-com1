@@ -3,10 +3,28 @@ import robots.*
 
 object juego {
 
+
+    method finDelJuego(){
+        game.removeVisual(robotAzul)
+        game.removeVisual(robotRojo)
+        game.removeVisual(vidaRojo) 
+        game.removeVisual(vidaAzul)
+        if (robotRojo.estaDerrotado()) {
+            pantallaFinal.mostrarFondoAzul()
+            game.addVisual(pantallaFinal)
+        } else if (robotAzul.estaDerrotado()) {
+            pantallaFinal.mostrarFondoRojo()
+            game.addVisual(pantallaFinal)
+        }
+        game.schedule(5000, { game.stop() })  
+    }
+
     method iniciar(){
         
+
+        game.addVisualCharacter(robotAzul)     
         game.addVisualCharacter(robotRojo)
-        game.addVisualCharacter(robotAzul)
+        
 
         game.addVisual(sensorR) 
         game.addVisual(sensorA)
@@ -45,3 +63,25 @@ object juego {
     }
 }
 
+object pantallaFinal {
+    var mostrarImagen = false
+    var imagenActual = "fondoOKAzul.jpg"
+    const posicionFinal = game.at(0, 0) // esquina superior izquierda
+
+    method position() = posicionFinal
+
+    method image() {
+        if (mostrarImagen) return imagenActual
+        return null
+    }
+
+    method mostrarFondoAzul() {
+        imagenActual = "fondoOKAzul.jpg"
+        mostrarImagen = true
+    }
+
+    method mostrarFondoRojo() {
+        imagenActual = "fondoOKRojo3.jpg"
+        mostrarImagen = true
+    }
+}
