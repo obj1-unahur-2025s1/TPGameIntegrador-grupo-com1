@@ -10,6 +10,10 @@ object juego {
         game.addVisual(sensorR) 
         game.addVisual(sensorA)
 
+
+        game.addVisual(vidaRojo) 
+        game.addVisual(vidaAzul)
+
         game.whenCollideDo(sensorR, { elemento =>
         if (!elemento.esRojo()) {
             sensorR.hayObstaculo(true)         
@@ -76,7 +80,7 @@ object robotRojo {
             imagenActual = "RobotRojoGolpearTest1.png"       
         if(sensor.hayObstaculo()){
             robotAzul.bajarSalud()
-            game.say(self, self.mensajeTest())
+            //game.say(self, self.mensajeTest())
         }
         game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
         game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
@@ -111,6 +115,7 @@ object robotRojo {
 
     method bajarSalud(){
         salud -= 1.max(0)
+        vidaRojo.salud(salud) // Actualiza la salud en el objeto de vida
     }
 
     method esRojo() = true
@@ -153,7 +158,7 @@ object robotAzul {
         imagenActual = "RobotAzulGolpearTest3.png"       
         if(sensor.hayObstaculo()){
             robotRojo.bajarSalud()
-            game.say(self, self.mensajeTest())
+            //game.say(self, self.mensajeTest())
         }
         game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
         game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
@@ -187,6 +192,7 @@ object robotAzul {
 
     method bajarSalud(){
         salud -= 1.max(0)
+        vidaAzul.salud(salud) // Actualiza la salud en el objeto de vida
     }
 
     method esRojo() = false
@@ -221,5 +227,114 @@ object sensorA {
     }
 }
 
+object vidaRojo {
+    const posicion = game.at(1, 11)
+    var salud = robotRojo.salud()
+
+    method position() = posicion
+    method salud(suSalud) {
+        salud = suSalud
+    }
+    method image() {
+        var imagenActual = "Rojo100V2.png"
+        if (salud <= 90) {
+            imagenActual = "Rojo90V2.png"
+        }
+        if (salud <= 80) {
+            imagenActual = "Rojo80V2.png"
+        }
+        if (salud <= 70) {
+            imagenActual = "Rojo70V2.png"
+        }
+        if (salud <= 60) {
+            imagenActual = "Rojo60V2.png"
+        }
+        if (salud <= 50) {
+            imagenActual = "Rojo50V2.png"
+        }
+        if (salud <= 40) {
+            imagenActual = "Rojo40V2.png"
+        }
+        if (salud <= 30) {
+            imagenActual = "Rojo30V2.png"
+        }
+        if (salud <= 20) {
+            imagenActual = "Rojo20V2.png"
+        }
+        if (salud <= 10) {
+            imagenActual = "Rojo10V2.png"
+        }
+        if (salud <= 0) {
+            imagenActual = "Rojo0V2.png"
+        }
+        return imagenActual
+    }
+
+
+    /*
+    method text() = "Salud: " + salud.toString()
+    method textColor() = paleta.blanco()
+    */
+    
+}
+
+object vidaAzul {
+    const posicion = game.at(17, 11)
+    var salud = robotRojo.salud()
+
+    method position() = posicion
+    method salud(suSalud) {
+        salud = suSalud
+    }
+
+    method image() {
+        var imagenActual = "Azul100V2.png"
+        if (salud <= 90) {
+            imagenActual = "Azul90V2.png"
+        }
+        if (salud <= 80) {
+            imagenActual = "Azul80V2.png"
+        }
+        if (salud <= 70) {
+            imagenActual = "Azul70V2.png"
+        }
+        if (salud <= 60) {
+            imagenActual = "Azul60V2.png"
+        }
+        if (salud <= 50) {
+            imagenActual = "Azul50V2.png"
+        }
+        if (salud <= 40) {
+            imagenActual = "Azul40V2.png"
+        }
+        if (salud <= 30) {
+            imagenActual = "Azul30V2.png"
+        }
+        if (salud <= 20) {
+            imagenActual = "Azul20V2.png"
+        }
+        if (salud <= 10) {
+            imagenActual = "Azul10V2.png"
+        }
+        if (salud <= 0) {
+            imagenActual = "Azul0V2.png"
+        }
+        return imagenActual
+    }
+    /*
+    method text() = "Salud: " + salud.toString()
+    method textColor() = paleta.blanco()
+    */
+}
+
+object paleta {
+    const property verde = "00FF00FF"
+    const property rojo = "FF0000FF"
+    const property azul = "0000FFFF"
+    const property amarillo = "FFFF00FF"
+    const property naranja = "FFA500FF"
+    const property violeta = "800080FF"
+    const property blanco = "FFFFFFFF"
+}
 
 
