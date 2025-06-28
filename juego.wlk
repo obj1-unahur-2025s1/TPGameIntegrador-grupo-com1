@@ -3,12 +3,8 @@ import robots.*
 
 object juego {
 
-
     method finDelJuego(){
-        game.removeVisual(robotAzul)
-        game.removeVisual(robotRojo)
-        game.removeVisual(vidaRojo) 
-        game.removeVisual(vidaAzul)
+        game.clear()
         if (robotRojo.estaDerrotado()) {
             pantallaFinal.mostrarFondoAzul()
             game.addVisual(pantallaFinal)
@@ -32,6 +28,8 @@ object juego {
 
         game.addVisual(vidaRojo) 
         game.addVisual(vidaAzul)
+        game.addVisual(cronometro)
+        game.onTick(1000,"tiempo",{ cronometro.disminuir() })  // cada 1000 ms = 1 segundo
 
         game.whenCollideDo(sensorR, { elemento =>
         if (!elemento.esRojo()) {
@@ -83,5 +81,36 @@ object pantallaFinal {
     method mostrarFondoRojo() {
         imagenActual = "fondoOKRojo3.jpg"
         mostrarImagen = true
+    }
+}
+
+object cronometro {
+    var tiempoRestante = 240  // 4 minutos en segundos
+    const posicion = game.at(16, 13)  // Ajustá según tu pantalla
+
+    method position() = posicion
+
+    method text() {
+        const minutos = (tiempoRestante / 60).truncate(0)
+        const segundos = (tiempoRestante % 60).truncate(0)
+        const conCero = if (segundos < 10) "0" + segundos.toString() else segundos.toString()
+        return minutos.toString() + ":" + conCero
+    }
+
+    method textColor() = paleta.rojo()
+    
+
+    method disminuir() {
+        if (tiempoRestante > 0) {
+            tiempoRestante -= 1
+        }
+        if (tiempoRestante == 0) {
+            //juego.finDelJuego()  // cuando se acaba el tiempo, termina la pelea
+            game.stop()
+        }
+    }
+
+    method reiniciar() {
+        tiempoRestante = 240
     }
 }

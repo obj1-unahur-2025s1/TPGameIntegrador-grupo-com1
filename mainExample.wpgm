@@ -16,7 +16,7 @@ program JuegoX {
 
     game.cellSize(tamanoCelda)
     game.title("Juego de Lucha")
-    game.boardGround("fondo2.jpg")
+    game.boardGround("fondo3.jpg")
 
     juego.iniciar()
 	game.start()
