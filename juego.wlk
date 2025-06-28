@@ -13,13 +13,13 @@ object juego {
         game.whenCollideDo(sensorR, { elemento =>
         if (!elemento.esRojo()) {
             sensorR.hayObstaculo(true)         
-            game.say(robotRojo, robotRojo.mensajeTest1())
+            //game.say(robotRojo, robotRojo.mensajeTest1())
         }
         })
         game.whenCollideDo(sensorA, { elemento =>
         if (!elemento.esAzul()) {
             sensorA.hayObstaculo(true)   
-            game.say(robotAzul, robotAzul.mensajeTest1())
+            //game.say(robotAzul, robotAzul.mensajeTest1())
         }})
 
         keyboard.q().onPressDo{robotRojo.bloquear()}
@@ -35,24 +35,21 @@ object juego {
 
         keyboard.left().onPressDo{robotAzul.moverIzquierda()}
         keyboard.right().onPressDo{robotAzul.moverDerecha()}
-
-        game.whenCollideDo(robotRojo, {elemento => elemento.bajarSalud() game.say(robotRojo,robotRojo.mensajeTest())})
-        game.whenCollideDo(robotAzul, {elemento => elemento.bajarSalud() game.say(robotAzul,robotAzul.mensajeTest())})
         
     }
 }
 
 object robotRojo {
     var salud = 100
+    var puedeGolpear = true
     const sensor = sensorR
-
     var posicionRojo = game.origin()
     var imagenActual = "RobotRojoNeutroTest1.png"
 
 
     method position() = posicionRojo
-
     method image() = imagenActual
+    method salud() = salud
 
     method hayAlgoALaDerecha() {    
         const proximaPosicion = posicionRojo.right(1)
@@ -69,8 +66,19 @@ object robotRojo {
     }
 
     method golpear(){
+        
+        if (puedeGolpear) {
+        puedeGolpear = false
         imagenActual = "RobotRojoGolpearTest1.png"
-        game.schedule(500,{self.neutro()})
+        
+        if(sensorR.hayObstaculo()){
+            robotAzul.bajarSalud()
+            game.say(self, self.mensajeTest())
+        }
+
+        game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
+        game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
+    }
     }
 
     method bloquear(){
@@ -98,7 +106,7 @@ object robotRojo {
     
 
     method bajarSalud(){
-        salud -= 1
+        salud -= 1.max(0)
     }
 
     method esRojo() = true
@@ -107,13 +115,13 @@ object robotRojo {
 
 object robotAzul {
     var salud = 100
-    
-
+    var puedeGolpear = true   
     var posicionAzul = game.at(20,0)
     var imagenActual = "RobotAzulNeutroTest1.png"
 
     method position() = posicionAzul
     method image() = imagenActual
+    method salud() = salud
 
     method hayAlgoALaIzquierda() {    
         const proximaPosicion = posicionAzul.left(1)
@@ -130,8 +138,18 @@ object robotAzul {
     }
 
     method golpear(){
+        if (puedeGolpear) {
+        puedeGolpear = false
         imagenActual = "RobotAzulGolpearTest3.png"
-        game.schedule(500,{self.neutro()})
+        
+        if(sensorA.hayObstaculo()){
+            robotRojo.bajarSalud()
+            game.say(self, self.mensajeTest())
+        }
+
+        game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
+        game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
+    }
     }
 
     method bloquear(){
@@ -158,7 +176,7 @@ object robotAzul {
     method mensajeTest1() = "Hay algo en la proxima posicion izq"
 
     method bajarSalud(){
-        salud -= 1
+        salud -= 1.max(0)
     }
 
     method esRojo() = false
