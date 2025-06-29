@@ -17,6 +17,18 @@ object robotRojo {
     method image() = imagenActual
     method salud() = salud
 
+    method reiniciar() {
+        salud = 100
+        puedeGolpear = true
+        puedeAgachar = true
+        puedeBloquear = true
+        posicionRojo = game.at(1,1)
+        imagenActual = "RobotRojoNeutroTest1.png"
+        posicion = "neutro"
+        estaDerrotado = false
+        sensor.position(posicionRojo)
+    }
+
     method hayAlgoALaDerecha() {    
         const proximaPosicion = posicionRojo.right(1)
         sensor.position(proximaPosicion)
@@ -31,8 +43,9 @@ object robotRojo {
     if (!estaDerrotado) {
         estaDerrotado = true
         posicion = "derrotado"
-        imagenActual = "RobotRojoDerrotado.png" // o Azul
-        game.schedule(1000, { juego.finDelJuego() })  
+        imagenActual = "RobotRojoDerrotado.png"
+        game.sound("resorte.mp3").play()
+        game.schedule(5000, { juego.finDelJuego() })  
     }
     }
 
@@ -125,6 +138,18 @@ object robotAzul {
     method image() = imagenActual
     method salud() = salud
 
+    method reiniciar() {
+        salud = 100
+        puedeGolpear = true
+        puedeAgachar = true
+        puedeBloquear = true
+        posicionAzul = game.at(22,1)
+        imagenActual = "RobotAzulNeutroTest1.png"
+        posicion = "neutro"
+        estaDerrotado = false
+        sensor.position(posicionAzul)
+    }
+
     method hayAlgoALaIzquierda() {    
         const proximaPosicion = posicionAzul.left(1)
         sensor.position(proximaPosicion)
@@ -139,8 +164,9 @@ object robotAzul {
     if (!estaDerrotado) {
         estaDerrotado = true
         posicion = "derrotado"
-        imagenActual = "RobotAzulDerrotado.png" // o Azul
-        game.schedule(1000, { juego.finDelJuego() })  
+        imagenActual = "RobotAzulDerrotado.png"
+        game.sound("resorte.mp3").play()
+        game.schedule(5000, { juego.finDelJuego() })  
     }
     }
 
@@ -248,13 +274,14 @@ object sensorA {
 object vidaRojo {
     const posicion = game.at(1, 11)
     var salud = robotRojo.salud()
+    var property imagenActual = "Rojo100V2.png"
 
     method position() = posicion
     method salud(suSalud) {
         salud = suSalud
     }
     method image() {
-        var imagenActual = "Rojo100V2.png"
+        imagenActual = "Rojo100V2.png"
         if (salud <= 90) {
             imagenActual = "Rojo90V2.png"
         }
@@ -300,6 +327,7 @@ object vidaRojo {
 object vidaAzul {
     const posicion = game.at(18, 11)
     var salud = robotRojo.salud()
+    var property imagenActual = "Azul100V2.png"
 
     method position() = posicion
     method salud(suSalud) {
@@ -307,7 +335,7 @@ object vidaAzul {
     }
 
     method image() {
-        var imagenActual = "Azul100V2.png"
+        imagenActual = "Azul100V2.png"
         if (salud <= 90) {
             imagenActual = "Azul90V2.png"
         }
