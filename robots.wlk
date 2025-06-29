@@ -96,10 +96,12 @@ object robotRojo {
     method bajarSalud(){
         if (posicion == "neutro" || posicion == "golpeando") {
             salud -= 10.max(0)
+            game.sound("golpe.wav").play()
         } else if (posicion == "agachado") {
             salud -= 0 // Si está agachado, no recibe daño
         } else if (posicion == "bloqueando") {
             robotAzul.bajarSalud()  // Si está bloqueando, no recibe daño pero el otro robot sí
+            game.sound("golpe.wav").play()
         }
         vidaRojo.salud(salud) // Actualiza la salud en el objeto de vida
     }
@@ -201,10 +203,12 @@ object robotAzul {
     method bajarSalud(){
         if (posicion == "neutro" || posicion == "golpeando") {
             salud -= 10.max(0)
+            game.sound("golpe.wav").play()
         } else if (posicion == "agachado") {
             salud -= 0 // Si está agachado, no recibe daño
         } else if (posicion == "bloqueando") {
             robotRojo.bajarSalud() // Si está bloqueando, no recibe daño pero el otro robot sí
+            game.sound("golpe.wav").play()
         }
         vidaAzul.salud(salud) // Actualiza la salud en el objeto de vida
     }

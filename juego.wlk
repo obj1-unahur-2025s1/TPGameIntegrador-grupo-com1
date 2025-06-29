@@ -17,7 +17,7 @@ object juego {
 
     method iniciar(){
         
-
+        game.sound("campanaInicial.mp3").play()
         game.addVisualCharacter(robotAzul)     
         game.addVisualCharacter(robotRojo)
         
@@ -74,11 +74,13 @@ object pantallaFinal {
     }
 
     method mostrarFondoAzul() {
+        game.sound("campanaFinal.mp3").play()
         imagenActual = "fondoOKAzul.jpg"
         mostrarImagen = true
     }
 
     method mostrarFondoRojo() {
+        game.sound("campanaFinal.mp3").play()
         imagenActual = "fondoOKRojo3.jpg"
         mostrarImagen = true
     }
@@ -105,6 +107,7 @@ object cronometro {
             tiempoRestante -= 1
         }
         if (tiempoRestante == 0) {
+            game.sound("campanaFinal.mp3").play()
             //juego.finDelJuego()  // cuando se acaba el tiempo, termina la pelea
             game.stop()
         }
