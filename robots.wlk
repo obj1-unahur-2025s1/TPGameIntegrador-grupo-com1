@@ -47,7 +47,7 @@ object robotRojo {
         posicion = "derrotado"
         imagenActual = "RobotRojoDerrotado.png"
         resorteSonido.play()
-        game.schedule(5000, { juego.finDelJuego() })
+        game.schedule(3000, { juego.finDelJuego() })
     }
     }
 
@@ -99,9 +99,11 @@ object robotRojo {
 }
 
     method moverIzquierda() {
-    posicionRojo = posicionRojo.left(1)
-    self.hayAlgoALaDerecha()  // Actualizá también al moverte hacia la izquierda
-    game.schedule(300, { self.neutro() })
+        if (!estaDerrotado){
+            posicionRojo = posicionRojo.left(1)
+            self.hayAlgoALaDerecha()  // Actualizá también al moverte hacia la izquierda
+            game.schedule(300, { self.neutro() })
+        }
 }
 
     method mensajeTest() = "Te golpe"
@@ -169,7 +171,7 @@ object robotAzul {
             posicion = "derrotado"
             imagenActual = "RobotAzulDerrotado.png"
             resorteSonido.play()
-            game.schedule(5000, { juego.finDelJuego() })  
+            game.schedule(3000, { juego.finDelJuego() })  
     }
     }
 
@@ -212,12 +214,14 @@ object robotAzul {
         }                  
     }
 
-    method moverDerecha() {   
-    posicionAzul = posicionAzul.right(1)  
-    self.hayAlgoALaIzquierda()  // SIEMPRE actualizar el sensor
-    game.schedule(300, { self.neutro() })
-}
-
+    method moverDerecha() {  
+        if (!estaDerrotado) { 
+            posicionAzul = posicionAzul.right(1)  
+            self.hayAlgoALaIzquierda()  // SIEMPRE actualizar el sensor
+            game.schedule(300, { self.neutro() })
+        }
+    }
+    
     method moverIzquierda() {
         if (!sensor.hayObstaculo() && !estaDerrotado){
             posicionAzul = posicionAzul.left(1)
