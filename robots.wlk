@@ -167,7 +167,7 @@ object robotAzul {
             }
             //game.say(self, self.mensajeTest())
         } else {
-            imagenActual = "RobotRojoGolpearTest3.png" // Si no hay obstáculo, vuelve a la imagen normal
+            imagenActual = "RobotAzulGolpearTest3.png" // Si no hay obstáculo, vuelve a la imagen normal
         }
         game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
         game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
