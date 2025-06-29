@@ -47,7 +47,7 @@ object robotRojo {
         posicion = "derrotado"
         imagenActual = "RobotRojoDerrotado.png"
         resorteSonido.play()
-        game.schedule(3000, { juego.finDelJuego() })
+        game.schedule(2000, { juego.finDeRonda("azul") }) // Azul gana la ronda
     }
     }
 
@@ -171,7 +171,7 @@ object robotAzul {
             posicion = "derrotado"
             imagenActual = "RobotAzulDerrotado.png"
             resorteSonido.play()
-            game.schedule(3000, { juego.finDelJuego() })  
+            game.schedule(2000, { juego.finDeRonda("rojo") }) // Rojo gana la ronda
     }
     }
 
@@ -316,9 +316,9 @@ object vidaRojo {
         if (salud <= 10) {
             imagenActual = "Rojo10V2.png"
         }
-        if (salud <= 0) {
+        if (salud <= 0 && !robotRojo.estaDerrotado()) {
             imagenActual = "Rojo0V2.png"
-            robotRojo.derrotado() // Si la salud llega a 0, el robot rojo es derrotado
+            robotRojo.derrotado()
         }
         return imagenActual
     }
@@ -370,9 +370,9 @@ object vidaAzul {
         if (salud <= 10) {
             imagenActual = "Azul10V2.png"
         }
-        if (salud <= 0) {
+        if (salud <= 0 && !robotAzul.estaDerrotado()) {
             imagenActual = "Azul0V2.png"
-            robotAzul.derrotado() // Si la salud llega a 0, el robot azul es derrotado
+            robotAzul.derrotado()
         }
         return imagenActual
     }

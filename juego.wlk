@@ -3,92 +3,162 @@ import robots.*
 
 object juego {
     const publicoSonido = game.sound("publico.mp3")
+    var maxRondas = 5   // Puedes ajustar la cantidad máxima de rondas
+    var rondasJugadas = 0
+    var rondasGanadasRojo = 0
+    var rondasGanadasAzul = 0
+    var ganadorFinal = null
 
+    method finDeRonda(ganador) {
+        marcadorRondas.aumentarRonda()
+        rondasJugadas += 1
+        if (ganador == "rojo") {
+            rondasGanadasRojo += 1
+            marcadorRondas.aumentarRondaGanadaRojo()
+            vidaRojo.salud(100)
+            vidaRojo.imagenActual("Rojo100V2.png")
+            vidaAzul.salud(0)
+            vidaAzul.imagenActual("Azul0V2.png")
+        } else if (ganador == "azul") {
+            rondasGanadasAzul += 1
+            marcadorRondas.aumentarRondaGanadaAzul()
+            vidaAzul.salud(100)
+            vidaAzul.imagenActual("Azul100V2.png")
+            vidaRojo.salud(0)
+            vidaRojo.imagenActual("Rojo0V2.png")
+        } else {
+            // Empate, no se cambia la salud de los robots
+        }
+
+        if (rondasJugadas == 2 && rondasGanadasRojo == 2){
+            ganadorFinal = "rojo"
+            self.finDelJuego()
+        } else if (rondasJugadas == 2 && rondasGanadasAzul == 2) {
+            ganadorFinal = "azul"
+            self.finDelJuego()
+        } else if (rondasJugadas <= 2 && rondasGanadasRojo == 1 && rondasGanadasAzul == 1) {
+            // Empate en las primeras dos rondas, no se decide ganador final
+        } else {
+            marcadorRondas.aumentarRonda()
+        }
+
+
+/*
+        if (rondasJugadas >= maxRondas) {
+            ganadorFinal = ganador   // <--- Esto ya está bien
+            self.finDelJuego()
+        } else {
+            game.schedule(2000, { self.reiniciarRonda() })
+        }
+    }
+*/
+        if (rondasJugadas >= maxRondas) {
+            if (rondasGanadasRojo > rondasGanadasAzul) {
+                ganadorFinal = "rojo"
+            } else if (rondasGanadasAzul > rondasGanadasRojo) {
+                ganadorFinal = "azul"
+            } else {
+                ganadorFinal = "empate"
+            }
+            self.finDelJuego()
+        } else {
+            game.schedule(2000, { self.reiniciarRonda() })
+        }
+    }
     method finDelJuego(){
+        marcadorRondas.reiniciar()
         game.clear()
-        if (robotRojo.estaDerrotado()) {
-            pantallaFinal.mostrarFondoAzul()
-            game.addVisual(pantallaFinal)
-        } else if (robotAzul.estaDerrotado()) {
+        if (ganadorFinal == "rojo") {
             pantallaFinal.mostrarFondoRojo()
+            game.addVisual(pantallaFinal)
+        } else if (ganadorFinal == "azul") {
+            pantallaFinal.mostrarFondoAzul()
             game.addVisual(pantallaFinal)
         } else {
             pantallaFinal.mostrarEmpate()
             game.addVisual(pantallaFinal)
         }
-        keyboard.y().onPressDo{self.reiniciar()}  // Reinicia el juego al presionar 'y'
-        keyboard.n().onPressDo{game.stop()}  // Detiene el juego al pres
+        keyboard.y().onPressDo{self.reiniciar()}
+        keyboard.n().onPressDo{game.stop()}
+    }
+
+    method reiniciarRonda() {
+        game.clear()
+        publicoSonido.stop()
+        robotRojo.reiniciar()
+        robotAzul.reiniciar()
+        sensorR.hayObstaculo(false)
+        sensorA.hayObstaculo(false)
+        cronometro.reiniciar()
+        vidaRojo.salud(100)
+        vidaAzul.salud(100)
+        vidaRojo.imagenActual("Rojo100V2.png")
+        vidaAzul.imagenActual("Azul100V2.png")
+        pantallaFinal.mostrarImagen(false)
+        // NO reiniciar el marcador de rondas ni el contador de rondasJugadas
+
+        // Volver a agregar los visuales y eventos
+        self.iniciar()
     }
 
     method reiniciar() {
-    game.clear()
-    publicoSonido.stop()                           // Limpia visuales y eventos previos
-    robotRojo.reiniciar()                  // Restablece estado del robot rojo
-    robotAzul.reiniciar()                  // Restablece estado del robot azul
-    sensorR.hayObstaculo(false)
-    sensorA.hayObstaculo(false)
-    cronometro.reiniciar()                 // Reinicia el cronómetro
-
-    vidaRojo.salud(100)
-    vidaAzul.salud(100)
-    vidaRojo.imagenActual("Rojo100V2.png")
-    vidaAzul.imagenActual("Azul100V2.png")
-
-    pantallaFinal.mostrarImagen(false)    // Oculta pantalla final
-    menu.activo(true)
-    game.schedule(500, { menu.iniciar() })
-}
-
+        game.clear()
+        publicoSonido.stop()
+        robotRojo.reiniciar()
+        robotAzul.reiniciar()
+        sensorR.hayObstaculo(false)
+        sensorA.hayObstaculo(false)
+        cronometro.reiniciar()
+        vidaRojo.salud(100)
+        vidaAzul.salud(100)
+        vidaRojo.imagenActual("Rojo100V2.png")
+        vidaAzul.imagenActual("Azul100V2.png")
+        pantallaFinal.mostrarImagen(false)
+        menu.activo(true)
+        marcadorRondas.reiniciar()
+        rondasJugadas = 0
+        ganadorFinal = null
+        game.schedule(500, { menu.iniciar() })
+    }
 
     method iniciar(){
         game.clear()
-
         game.sound("campanaInicial.mp3").play()
-        
-        
         publicoSonido.shouldLoop(true)
         publicoSonido.play()
-        
-        game.addVisualCharacter(robotAzul)     
+        game.addVisualCharacter(robotAzul)
         game.addVisualCharacter(robotRojo)
-        
-
-        game.addVisual(sensorR) 
+        game.addVisual(sensorR)
         game.addVisual(sensorA)
-
-
-        game.addVisual(vidaRojo) 
+        game.addVisual(vidaRojo)
         game.addVisual(vidaAzul)
         game.addVisual(cronometro)
-        game.onTick(1000,"tiempo",{ cronometro.disminuir() })  // cada 1000 ms = 1 segundo
+        game.addVisual(marcadorRondas)
+        game.onTick(1000,"tiempo",{ cronometro.disminuir() })
 
         game.whenCollideDo(sensorR, { elemento =>
-        if (!elemento.esRojo()) {
-            sensorR.hayObstaculo(true)         
-            //game.say(robotRojo, robotRojo.mensajeTest1())
-            game.schedule(100, { sensorR.hayObstaculo(false) })
-        }
+            if (!elemento.esRojo()) {
+                sensorR.hayObstaculo(true)
+                game.schedule(100, { sensorR.hayObstaculo(false) })
+            }
         })
         game.whenCollideDo(sensorA, { elemento =>
-        if (!elemento.esAzul()) {
-            sensorA.hayObstaculo(true)   
-            //game.say(robotAzul, robotAzul.mensajeTest1())
-            game.schedule(100, { sensorA.hayObstaculo(false) })
-        }})
+            if (!elemento.esAzul()) {
+                sensorA.hayObstaculo(true)
+                game.schedule(100, { sensorA.hayObstaculo(false) })
+            }
+        })
 
         keyboard.q().onPressDo{robotRojo.bloquear()}
         keyboard.s().onPressDo{robotRojo.agachar()}
         keyboard.e().onPressDo{robotRojo.golpear()}
-
         keyboard.a().onPressDo{robotRojo.moverIzquierda()}
         keyboard.d().onPressDo{robotRojo.moverDerecha()}
-
         keyboard.k().onPressDo{robotAzul.bloquear()}
         keyboard.down().onPressDo{robotAzul.agachar()}
         keyboard.l().onPressDo{robotAzul.golpear()}
-
         keyboard.left().onPressDo{robotAzul.moverIzquierda()}
-        keyboard.right().onPressDo{robotAzul.moverDerecha()}       
+        keyboard.right().onPressDo{robotAzul.moverDerecha()}
     }
 }
 
@@ -170,6 +240,7 @@ object cronometro {
         return minutos.toString() + ":" + conCero
     }
 
+
     method textColor() = paleta.rojo()
     
 
@@ -186,5 +257,34 @@ object cronometro {
 
     method reiniciar() {
         tiempoRestante = 240
+    }
+}
+object marcadorRondas {
+    var rondas = 0
+    var rondasGanadasRojo = 0
+    var rondasGanadasAzul = 0
+
+    const posicion = game.at(16, 14)  // Ajustá según tu pantalla
+
+    method position() = posicion
+
+    method text() {
+        return "Rondas Rojo: " + rondasGanadasRojo.toString() + " Rondas Azul: " + rondasGanadasAzul.toString()
+    }
+
+    method textColor() = paleta.rojo()
+
+    method aumentarRonda() {
+        rondas += 1
+    }
+    method aumentarRondaGanadaRojo() {
+        rondasGanadasRojo += 1
+    }
+    method aumentarRondaGanadaAzul() {
+        rondasGanadasAzul += 1
+    }
+
+    method reiniciar() {
+        rondas = 0
     }
 }
