@@ -2,6 +2,7 @@ import wollok.game.*
 import robots.*
 
 object juego {
+    const publicoSonido = game.sound("publico.mp3")
 
     method finDelJuego(){
         game.clear()
@@ -19,24 +20,35 @@ object juego {
         keyboard.n().onPressDo{game.stop()}  // Detiene el juego al pres
     }
 
-    method reiniciar(){
-        game.clear()
-        robotRojo.reiniciar()
-        robotAzul.reiniciar()
-        cronometro.reiniciar()
-        vidaRojo.salud(robotRojo.salud())
-        vidaAzul.salud(robotAzul.salud())
-        vidaRojo.imagenActual("Rojo100V2.png")
-        vidaAzul.imagenActual("Azul100V2.png")
-        menu.activo(true)
-        menu.iniciar()
-    }
+    method reiniciar() {
+    game.clear()
+    publicoSonido.stop()                           // Limpia visuales y eventos previos
+    robotRojo.reiniciar()                  // Restablece estado del robot rojo
+    robotAzul.reiniciar()                  // Restablece estado del robot azul
+    sensorR.hayObstaculo(false)
+    sensorA.hayObstaculo(false)
+    cronometro.reiniciar()                 // Reinicia el cronómetro
+
+    vidaRojo.salud(100)
+    vidaAzul.salud(100)
+    vidaRojo.imagenActual("Rojo100V2.png")
+    vidaAzul.imagenActual("Azul100V2.png")
+
+    pantallaFinal.mostrarImagen(false)    // Oculta pantalla final
+    menu.activo(true)
+    game.schedule(500, { menu.iniciar() })
+}
 
 
     method iniciar(){
         game.clear()
 
         game.sound("campanaInicial.mp3").play()
+        
+        
+        publicoSonido.shouldLoop(true)
+        publicoSonido.play()
+        
         game.addVisualCharacter(robotAzul)     
         game.addVisualCharacter(robotRojo)
         
@@ -82,10 +94,17 @@ object juego {
 
 object menu {
   var property activo = true
+  
+
   method iniciar(){
+    const musica = game.sound("rocky.mp3")
     game.addVisual(pantallaInicio)
+    musica.shouldLoop(true)
+    game.schedule(1000, {musica.play()}) // Reproduce la música de fondo al iniciar el juego
+
     keyboard.any().onPressDo({
         if (activo){
+            game.schedule(500, {musica.stop()}) // Detiene la música de fondo al iniciar el juego
             game.removeVisual(pantallaInicio)
             game.addVisual(pantallaControles)
             activo = false
@@ -96,7 +115,7 @@ object menu {
 }
 
 object pantallaFinal {
-    var mostrarImagen = false
+    var property mostrarImagen = false
     var imagenActual = "ganadorAzul.jpg"
     const posicionFinal = game.at(0, 0) // esquina superior izquierda
 

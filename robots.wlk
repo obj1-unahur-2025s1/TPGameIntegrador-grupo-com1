@@ -12,6 +12,7 @@ object robotRojo {
     var property posicion = "neutro"
     var property estaDerrotado = false
     const sensor = sensorR
+    
 
     method position() = posicionRojo
     method image() = imagenActual
@@ -40,17 +41,18 @@ object robotRojo {
     }
 
     method derrotado() {
+        const resorteSonido = game.sound("resorte2.mp3")
     if (!estaDerrotado) {
         estaDerrotado = true
         posicion = "derrotado"
         imagenActual = "RobotRojoDerrotado.png"
-        game.sound("resorte.mp3").play()
-        game.schedule(5000, { juego.finDelJuego() })  
+        resorteSonido.play()
+        game.schedule(5000, { juego.finDelJuego() })
     }
     }
 
     method agachar(){
-        if (puedeAgachar) {
+        if (puedeAgachar && !estaDerrotado) {
             puedeAgachar = false
             posicion = "agachado"
             imagenActual = "RobotRojoAgacharTest1.png"
@@ -60,7 +62,7 @@ object robotRojo {
     }
 
     method golpear(){       
-        if (puedeGolpear) {
+        if (puedeGolpear && !estaDerrotado) {
             puedeGolpear = false
             posicion = "golpeando"               
         if(sensor.hayObstaculo()) {
@@ -79,7 +81,7 @@ object robotRojo {
     }
     }
     method bloquear(){
-        if(puedeBloquear) {
+        if(puedeBloquear && !estaDerrotado) {
             puedeBloquear = false
             posicion = "bloqueando"
             imagenActual = "RobotRojoBloquearTest1.png"
@@ -89,7 +91,7 @@ object robotRojo {
     }
 
     method moverDerecha() {
-    if (!sensor.hayObstaculo()) {
+    if (!sensor.hayObstaculo() && !estaDerrotado) {
         posicionRojo = posicionRojo.right(1)
     }
     self.hayAlgoALaDerecha()  // SIEMPRE actualizar el sensor
@@ -161,17 +163,18 @@ object robotAzul {
     }
 
     method derrotado() {
-    if (!estaDerrotado) {
-        estaDerrotado = true
-        posicion = "derrotado"
-        imagenActual = "RobotAzulDerrotado.png"
-        game.sound("resorte.mp3").play()
-        game.schedule(5000, { juego.finDelJuego() })  
+        const resorteSonido = game.sound("resorte2.mp3")
+        if (!estaDerrotado) {
+            estaDerrotado = true
+            posicion = "derrotado"
+            imagenActual = "RobotAzulDerrotado.png"
+            resorteSonido.play()
+            game.schedule(5000, { juego.finDelJuego() })  
     }
     }
 
     method agachar(){
-        if (puedeAgachar) {
+        if (puedeAgachar && !estaDerrotado) {
             puedeAgachar = false
             posicion = "agachado"
             imagenActual = "RobotAzulAgacharTest1.png"
@@ -181,10 +184,10 @@ object robotAzul {
     }
 
     method golpear(){       
-        if (puedeGolpear) {
+        if (puedeGolpear && !estaDerrotado) {
             puedeGolpear = false
             posicion = "golpeando"               
-        if(sensor.hayObstaculo()) {
+        if(sensor.hayObstaculo() && !estaDerrotado) {
             robotRojo.bajarSalud()
             if (robotRojo.posicion() == "neutro" || robotRojo.posicion() == "bloqueando"){
                 imagenActual = "RobotAzulGolpearConEfecto.png" 
@@ -200,7 +203,7 @@ object robotAzul {
     }
     }
     method bloquear(){
-        if(puedeBloquear) {
+        if(puedeBloquear && !estaDerrotado) {
             puedeBloquear = false
             posicion = "bloqueando"
             imagenActual = "RobotAzulBloquearTest1.png"
@@ -216,7 +219,7 @@ object robotAzul {
 }
 
     method moverIzquierda() {
-        if (!sensor.hayObstaculo()){
+        if (!sensor.hayObstaculo() && !estaDerrotado){
             posicionAzul = posicionAzul.left(1)
             self.hayAlgoALaIzquierda()  // Actualizá también al moverte hacia la izquierda
             game.schedule(300, { self.neutro() })
