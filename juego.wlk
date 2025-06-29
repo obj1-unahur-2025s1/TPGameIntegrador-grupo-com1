@@ -14,17 +14,21 @@ object juego {
         if (ganador == "rojo") {
             rondasGanadasRojo += 1
             marcadorRondas.aumentarRondaGanadaRojo()
+            /*
             vidaRojo.salud(100)
             vidaRojo.imagenActual("Rojo100V2.png")
             vidaAzul.salud(0)
             vidaAzul.imagenActual("Azul0V2.png")
+            */
         } else if (ganador == "azul") {
             rondasGanadasAzul += 1
             marcadorRondas.aumentarRondaGanadaAzul()
+            /*
             vidaAzul.salud(100)
             vidaAzul.imagenActual("Azul100V2.png")
             vidaRojo.salud(0)
             vidaRojo.imagenActual("Rojo0V2.png")
+            */
         } else if (ganador == "empate") {
             pantallaFinal.mostrarEmpate()
             game.addVisual(pantallaFinal)
@@ -46,7 +50,7 @@ object juego {
             self.finDelJuego()
 
             // en Caso de Empate (ningún jugador ganó 3 rondas)
-        } else if (ganador!= "empate"){
+        } else if (ganador != "empate"){
             game.schedule(2000, { self.reiniciarRonda() })
         }
 
@@ -79,12 +83,11 @@ object juego {
         if (ganadorFinal == "rojo") {
             pantallaFinal.mostrarFondoRojo()
             game.addVisual(pantallaFinal)
-            keyboard.y().onPressDo{self.reiniciar()}
         } else if (ganadorFinal == "azul") {
             pantallaFinal.mostrarFondoAzul()
             game.addVisual(pantallaFinal)
-            keyboard.y().onPressDo{self.reiniciar()}
         }
+        keyboard.y().onPressDo{self.reiniciar()}
     }
 
     method reiniciarRonda() {
@@ -139,7 +142,7 @@ object juego {
         game.addVisual(vidaAzul)
         game.addVisual(cronometro)
         game.addVisual(marcadorRondas)
-        game.onTick(1000,"tiempo",{ cronometro.disminuir() })
+        game.onTick(1000,"tiempo",{cronometro.disminuir()})
 
         game.whenCollideDo(sensorR, { elemento =>
             if (!elemento.esRojo()) {
@@ -250,7 +253,8 @@ object cronometro {
     
 
     method disminuir() {
-        if (tiempoRestante > 0) {
+        if(!robotAzul.estaDerrotado() && !robotRojo.estaDerrotado()) {
+            if (tiempoRestante > 0) {
             tiempoRestante -= 1
         }
         if (tiempoRestante == 0) {
@@ -258,6 +262,7 @@ object cronometro {
             //juego.finDelJuego()  // cuando se acaba el tiempo, termina la pelea
             juego.finDeRonda("empate")
         }
+        }       
     }
 
     method reiniciar() {
@@ -292,5 +297,6 @@ object marcadorRondas {
     method reiniciar() {
         rondasGanadasRojo = 0
         rondasGanadasAzul = 0
+        rondas = 0
     }
 }

@@ -47,7 +47,7 @@ object robotRojo {
         posicion = "derrotado"
         imagenActual = "RobotRojoDerrotado.png"
         resorteSonido.play()
-        game.schedule(2000, { juego.finDeRonda("azul") }) // Azul gana la ronda
+        game.schedule(2000, { juego.finDeRonda("azul") }) 
     }
     }
 
@@ -316,7 +316,7 @@ object vidaRojo {
         if (salud <= 10) {
             imagenActual = "Rojo10V2.png"
         }
-        if (salud <= 0 && !robotRojo.estaDerrotado()) {
+        if (salud <= 0) {
             imagenActual = "Rojo0V2.png"
             robotRojo.derrotado()
         }
@@ -370,7 +370,7 @@ object vidaAzul {
         if (salud <= 10) {
             imagenActual = "Azul10V2.png"
         }
-        if (salud <= 0 && !robotAzul.estaDerrotado()) {
+        if (salud <= 0) {
             imagenActual = "Azul0V2.png"
             robotAzul.derrotado()
         }
