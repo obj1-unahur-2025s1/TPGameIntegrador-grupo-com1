@@ -3,7 +3,6 @@ import robots.*
 
 object juego {
     const publicoSonido = game.sound("publico.mp3")
-    var maxRondas = 5   // Puedes ajustar la cantidad máxima de rondas
     var rondasJugadas = 0
     var rondasGanadasRojo = 0
     var rondasGanadasAzul = 0
@@ -32,6 +31,7 @@ object juego {
             game.schedule(4000, { self.reiniciarRonda() })
         }
 
+        // Chequeo si hay un ganador final
         if (rondasJugadas == 2 && rondasGanadasRojo == 2){
             ganadorFinal = "rojo"
             self.finDelJuego()
@@ -44,7 +44,8 @@ object juego {
         } else if (rondasGanadasRojo == 3) {
             ganadorFinal = "rojo"
             self.finDelJuego()
-            // en Caso de Empate 
+
+            // en Caso de Empate (ningún jugador ganó 3 rondas)
         } else if (ganador!= "empate"){
             game.schedule(2000, { self.reiniciarRonda() })
         }
@@ -70,7 +71,6 @@ object juego {
         } else {
             game.schedule(2000, { self.reiniciarRonda() })
         }
-
 */
     }
     method finDelJuego(){
@@ -85,8 +85,6 @@ object juego {
             game.addVisual(pantallaFinal)
             keyboard.y().onPressDo{self.reiniciar()}
         }
-        //keyboard.y().onPressDo{self.reiniciar()}
-        //keyboard.n().onPressDo{game.stop()}
     }
 
     method reiniciarRonda() {
@@ -271,7 +269,7 @@ object marcadorRondas {
     var rondasGanadasRojo = 0
     var rondasGanadasAzul = 0
 
-    const posicion = game.at(16, 14)  // Ajustá según tu pantalla
+    const posicion = game.at(15, 0)  // Ajustá según tu pantalla
 
     method position() = posicion
 
