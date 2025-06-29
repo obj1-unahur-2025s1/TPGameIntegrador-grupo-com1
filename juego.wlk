@@ -63,7 +63,7 @@ object juego {
 
 object pantallaFinal {
     var mostrarImagen = false
-    var imagenActual = "fondoOKAzul.jpg"
+    var imagenActual = "ganadorAzul.jpg"
     const posicionFinal = game.at(0, 0) // esquina superior izquierda
 
     method position() = posicionFinal
@@ -75,13 +75,13 @@ object pantallaFinal {
 
     method mostrarFondoAzul() {
         game.sound("campanaFinal.mp3").play()
-        imagenActual = "fondoOKAzul.jpg"
+        imagenActual = "ganadorAzul.jpg"
         mostrarImagen = true
     }
 
     method mostrarFondoRojo() {
         game.sound("campanaFinal.mp3").play()
-        imagenActual = "fondoOKRojo3.jpg"
+        imagenActual = "ganadorRojo.jpg"
         mostrarImagen = true
     }
 }
