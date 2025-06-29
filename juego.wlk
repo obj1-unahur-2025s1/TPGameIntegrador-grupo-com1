@@ -26,8 +26,10 @@ object juego {
             vidaAzul.imagenActual("Azul100V2.png")
             vidaRojo.salud(0)
             vidaRojo.imagenActual("Rojo0V2.png")
-        } else {
-            // Empate, no se cambia la salud de los robots
+        } else if (ganador == "empate") {
+            pantallaFinal.mostrarEmpate()
+            game.addVisual(pantallaFinal)
+            game.schedule(4000, { self.reiniciarRonda() })
         }
 
         if (rondasJugadas == 2 && rondasGanadasRojo == 2){
@@ -36,12 +38,16 @@ object juego {
         } else if (rondasJugadas == 2 && rondasGanadasAzul == 2) {
             ganadorFinal = "azul"
             self.finDelJuego()
-        } else if (rondasJugadas <= 2 && rondasGanadasRojo == 1 && rondasGanadasAzul == 1) {
-            // Empate en las primeras dos rondas, no se decide ganador final
-        } else {
-            marcadorRondas.aumentarRonda()
+        } else if (rondasGanadasAzul == 3) {
+            ganadorFinal = "azul"
+            self.finDelJuego() 
+        } else if (rondasGanadasRojo == 3) {
+            ganadorFinal = "rojo"
+            self.finDelJuego()
+            // en Caso de Empate 
+        } else if (ganador!= "empate"){
+            game.schedule(2000, { self.reiniciarRonda() })
         }
-
 
 /*
         if (rondasJugadas >= maxRondas) {
@@ -51,7 +57,7 @@ object juego {
             game.schedule(2000, { self.reiniciarRonda() })
         }
     }
-*/
+
         if (rondasJugadas >= maxRondas) {
             if (rondasGanadasRojo > rondasGanadasAzul) {
                 ganadorFinal = "rojo"
@@ -64,6 +70,8 @@ object juego {
         } else {
             game.schedule(2000, { self.reiniciarRonda() })
         }
+
+*/
     }
     method finDelJuego(){
         marcadorRondas.reiniciar()
@@ -71,15 +79,14 @@ object juego {
         if (ganadorFinal == "rojo") {
             pantallaFinal.mostrarFondoRojo()
             game.addVisual(pantallaFinal)
+            keyboard.y().onPressDo{self.reiniciar()}
         } else if (ganadorFinal == "azul") {
             pantallaFinal.mostrarFondoAzul()
             game.addVisual(pantallaFinal)
-        } else {
-            pantallaFinal.mostrarEmpate()
-            game.addVisual(pantallaFinal)
+            keyboard.y().onPressDo{self.reiniciar()}
         }
-        keyboard.y().onPressDo{self.reiniciar()}
-        keyboard.n().onPressDo{game.stop()}
+        //keyboard.y().onPressDo{self.reiniciar()}
+        //keyboard.n().onPressDo{game.stop()}
     }
 
     method reiniciarRonda() {
@@ -102,6 +109,7 @@ object juego {
     }
 
     method reiniciar() {
+        marcadorRondas.reiniciar()
         game.clear()
         publicoSonido.stop()
         robotRojo.reiniciar()
@@ -115,7 +123,6 @@ object juego {
         vidaAzul.imagenActual("Azul100V2.png")
         pantallaFinal.mostrarImagen(false)
         menu.activo(true)
-        marcadorRondas.reiniciar()
         rondasJugadas = 0
         ganadorFinal = null
         game.schedule(500, { menu.iniciar() })
@@ -228,7 +235,7 @@ object pantallaControles {
 } 
 
 object cronometro {
-    var tiempoRestante = 240  // 4 minutos en segundos
+    var tiempoRestante = 30  // 4 minutos en segundos
     const posicion = game.at(16, 13)  // Ajustá según tu pantalla
 
     method position() = posicion
@@ -251,12 +258,12 @@ object cronometro {
         if (tiempoRestante == 0) {
             game.sound("campanaFinal.mp3").play()
             //juego.finDelJuego()  // cuando se acaba el tiempo, termina la pelea
-            juego.finDelJuego()
+            juego.finDeRonda("empate")
         }
     }
 
     method reiniciar() {
-        tiempoRestante = 240
+        tiempoRestante = 30
     }
 }
 object marcadorRondas {
@@ -285,6 +292,7 @@ object marcadorRondas {
     }
 
     method reiniciar() {
-        rondas = 0
+        rondasGanadasRojo = 0
+        rondasGanadasAzul = 0
     }
 }
