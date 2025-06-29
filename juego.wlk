@@ -15,8 +15,10 @@ object juego {
         game.schedule(5000, { game.stop() })  
     }
 
+
     method iniciar(){
-        
+        game.clear()
+
         game.sound("campanaInicial.mp3").play()
         game.addVisualCharacter(robotAzul)     
         game.addVisualCharacter(robotRojo)
@@ -61,6 +63,21 @@ object juego {
     }
 }
 
+object menu {
+  var activo = true
+  method iniciar(){
+    game.addVisual(pantallaInicio)
+    keyboard.any().onPressDo({
+        if (activo){
+            game.removeVisual(pantallaInicio)
+            game.addVisual(pantallaControles)
+            activo = false
+            game.schedule(5000, {juego.iniciar()})
+        }
+    })
+  }
+}
+
 object pantallaFinal {
     var mostrarImagen = false
     var imagenActual = "ganadorAzul.jpg"
@@ -85,6 +102,18 @@ object pantallaFinal {
         mostrarImagen = true
     }
 }
+
+object pantallaInicio {
+  var property image = "pantallaInicial.png"
+  method position() = game.at(0, 0)
+
+}
+
+object pantallaControles {
+  var property image = "controles.png"
+  method position() = game.at(0, 0)
+
+} 
 
 object cronometro {
     var tiempoRestante = 240  // 4 minutos en segundos

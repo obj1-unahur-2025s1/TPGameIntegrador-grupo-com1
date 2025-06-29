@@ -18,7 +18,7 @@ program JuegoX {
     game.title("Juego de Lucha")
     game.boardGround("fondo3.jpg")
 
-    juego.iniciar()
+    menu.iniciar()
 	game.start()
     
 }
