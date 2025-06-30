@@ -167,8 +167,11 @@ object juego {
         keyboard.l().onPressDo{robotAzul.golpear()}
         keyboard.left().onPressDo{robotAzul.moverIzquierda()}
         keyboard.right().onPressDo{robotAzul.moverDerecha()}
-    }
+        game.addVisual(enPausa)
+        keyboard.p().onPressDo{enPausa.alternarPausa()}
+        }
 }
+
 
 object menu {
   var property activo = true
@@ -190,6 +193,20 @@ object menu {
         }
     })
   }
+}
+object enPausa {
+  var property pausa = false
+  method alternarPausa() {
+    pausa = !pausa
+  }
+    method image() {
+        if (pausa) {
+        return "pausa.png"
+        } else {
+        return null
+        }
+    }
+    method position() = game.at(0, 0) 
 }
 
 object pantallaFinal {
@@ -253,7 +270,7 @@ object cronometro {
     
 
     method disminuir() {
-        if(!robotAzul.estaDerrotado() && !robotRojo.estaDerrotado()) {
+        if(!robotAzul.estaDerrotado() && !robotRojo.estaDerrotado() && !enPausa.pausa()) {
             if (tiempoRestante > 0) {
             tiempoRestante -= 1
         }

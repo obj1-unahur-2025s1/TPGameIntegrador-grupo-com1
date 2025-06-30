@@ -48,7 +48,7 @@ object robotRojo {
         posicion = "derrotado"
         imagenActual = "RobotRojoDerrotado.png"
         resorteSonido.play()
-        game.schedule(2000, { juego.finDeRonda("azul") }) 
+        game.schedule(2000, { juego.finDeRonda("azul") })  
     }
     }
 
