@@ -12,6 +12,7 @@ object robotRojo {
     var property posicion = "neutro"
     var property estaDerrotado = false
     const sensor = sensorR
+    var pasosPared = 0
     
 
     method position() = posicionRojo
@@ -93,16 +94,18 @@ object robotRojo {
     method moverDerecha() {
     if (!sensor.hayObstaculo() && !estaDerrotado) {
         posicionRojo = posicionRojo.right(1)
+        pasosPared = pasosPared + 1
     }
     self.hayAlgoALaDerecha()  // SIEMPRE actualizar el sensor
     game.schedule(300, { self.neutro() })
 }
 
     method moverIzquierda() {
-        if (!estaDerrotado){
+        if (!estaDerrotado && pasosPared !== 0){
             posicionRojo = posicionRojo.left(1)
             self.hayAlgoALaDerecha()  // Actualizá también al moverte hacia la izquierda
             game.schedule(300, { self.neutro() })
+            pasosPared = pasosPared - 1
         }
 }
 
@@ -131,12 +134,13 @@ object robotAzul {
     var property salud = 100
     var puedeGolpear = true
     var puedeAgachar = true
-    var puedeBloquear = true     
+    var puedeBloquear = true 
     var posicionAzul = game.at(22,1)
     var imagenActual = "RobotAzulNeutroTest1.png"
     var property posicion = "neutro"
     var property estaDerrotado = false
     const sensor = sensorA
+    var pasosPared = 0 // Variable para contar los pasos hacia la pared
 
     method position() = posicionAzul
     method image() = imagenActual
@@ -215,18 +219,21 @@ object robotAzul {
     }
 
     method moverDerecha() {  
-        if (!estaDerrotado) { 
+        if (!estaDerrotado && pasosPared !== 0)  { 
             posicionAzul = posicionAzul.right(1)  
             self.hayAlgoALaIzquierda()  // SIEMPRE actualizar el sensor
             game.schedule(300, { self.neutro() })
+            pasosPared = pasosPared - 1
         }
     }
+   
     
     method moverIzquierda() {
-        if (!sensor.hayObstaculo() && !estaDerrotado){
+        if (!sensor.hayObstaculo() ){
             posicionAzul = posicionAzul.left(1)
             self.hayAlgoALaIzquierda()  // Actualizá también al moverte hacia la izquierda
             game.schedule(300, { self.neutro() })
+            pasosPared = pasosPared + 1 // Incrementa el contador de pasos hacia la pared
         }
 }
 
