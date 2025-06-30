@@ -131,48 +131,81 @@ object juego {
 
     method iniciar(){
         game.clear()
-        game.sound("campanaInicial.mp3").play()
-        publicoSonido.shouldLoop(true)
-        publicoSonido.play()
-        game.addVisualCharacter(robotAzul)
-        game.addVisualCharacter(robotRojo)
-        game.addVisual(sensorR)
-        game.addVisual(sensorA)
-        game.addVisual(vidaRojo)
-        game.addVisual(vidaAzul)
-        game.addVisual(cronometro)
-        game.addVisual(marcadorRondas)
-        game.onTick(1000,"tiempo",{cronometro.disminuir()})
+        game.addVisual(fondo3)
+        game.schedule(1000, {
+            game.clear()
+            game.addVisual(fondo2)
+            game.schedule(1000, {
+                game.clear()
+                game.addVisual(fondo1)
+                game.schedule(1000, {
+                    game.clear()
+                    game.addVisual(fondofight)
+                    game.schedule(1000, {
+                    game.sound("campanaInicial.mp3").play()
+                    game.clear()
+                    publicoSonido.shouldLoop(true)
+                    publicoSonido.play()
+                    game.addVisualCharacter(robotAzul)
+                    game.addVisualCharacter(robotRojo)
+                    game.addVisual(sensorR)
+                    game.addVisual(sensorA)
+                    game.addVisual(vidaRojo)
+                    game.addVisual(vidaAzul)
+                    game.addVisual(cronometro)
+                    game.addVisual(marcadorRondas)
+                    game.onTick(1000,"tiempo",{cronometro.disminuir()})
 
-        game.whenCollideDo(sensorR, { elemento =>
-            if (!elemento.esRojo()) {
-                sensorR.hayObstaculo(true)
-                game.schedule(100, { sensorR.hayObstaculo(false) })
-            }
-        })
-        game.whenCollideDo(sensorA, { elemento =>
-            if (!elemento.esAzul()) {
-                sensorA.hayObstaculo(true)
-                game.schedule(100, { sensorA.hayObstaculo(false) })
-            }
-        })
+                    game.whenCollideDo(sensorR, { elemento =>
+                        if (!elemento.esRojo()) {
+                            sensorR.hayObstaculo(true)
+                            game.schedule(100, { sensorR.hayObstaculo(false) })
+                        }
+                    })
+                    game.whenCollideDo(sensorA, { elemento =>
+                        if (!elemento.esAzul()) {
+                            sensorA.hayObstaculo(true)
+                            game.schedule(100, { sensorA.hayObstaculo(false) })
+                        }
+                    })
 
-        keyboard.q().onPressDo{robotRojo.bloquear()}
-        keyboard.s().onPressDo{robotRojo.agachar()}
-        keyboard.e().onPressDo{robotRojo.golpear()}
-        keyboard.a().onPressDo{robotRojo.moverIzquierda()}
-        keyboard.d().onPressDo{robotRojo.moverDerecha()}
-        keyboard.k().onPressDo{robotAzul.bloquear()}
-        keyboard.down().onPressDo{robotAzul.agachar()}
-        keyboard.l().onPressDo{robotAzul.golpear()}
-        keyboard.left().onPressDo{robotAzul.moverIzquierda()}
-        keyboard.right().onPressDo{robotAzul.moverDerecha()}
-        game.addVisual(enPausa)
-        keyboard.p().onPressDo{enPausa.alternarPausa()}
+                    keyboard.q().onPressDo{robotRojo.bloquear()}
+                    keyboard.s().onPressDo{robotRojo.agachar()}
+                    keyboard.e().onPressDo{robotRojo.golpear()}
+                    keyboard.a().onPressDo{robotRojo.moverIzquierda()}
+                    keyboard.d().onPressDo{robotRojo.moverDerecha()}
+                    keyboard.k().onPressDo{robotAzul.bloquear()}
+                    keyboard.down().onPressDo{robotAzul.agachar()}
+                    keyboard.l().onPressDo{robotAzul.golpear()}
+                    keyboard.left().onPressDo{robotAzul.moverIzquierda()}
+                    keyboard.right().onPressDo{robotAzul.moverDerecha()}
+                    game.addVisual(enPausa)
+                    keyboard.p().onPressDo{enPausa.alternarPausa()}
+                    })
+                })
+        })
+        })
         }
+    }
+    
+
+object fondo3{
+    var property image = "fondo3seg.png"
+    method position() = game.at(0, 0)  
+  
 }
-
-
+object fondo2 {
+    var property image = "fondo2seg.png"
+    method position() = game.at(0, 0)  
+}
+object fondo1 {
+    var property image = "fondo1seg.png"
+    method position() = game.at(0, 0)  
+}
+object fondofight {
+    var property image = "fondofight.png"
+    method position() = game.at(0, 0)  
+}
 object menu {
   var property activo = true
   
@@ -188,6 +221,7 @@ object menu {
             game.schedule(500, {musica.stop()}) // Detiene la música de fondo al iniciar el juego
             game.removeVisual(pantallaInicio)
             game.addVisual(pantallaControles)
+            
             activo = false
             game.schedule(5000, {juego.iniciar()})
         }
@@ -253,10 +287,11 @@ object pantallaControles {
 } 
 
 object cronometro {
-    var tiempoRestante = 30  // 4 minutos en segundos
+    var tiempoRestante = 300  // 4 minutos en segundos
     const posicion = game.at(16, 13)  // Ajustá según tu pantalla
 
     method position() = posicion
+    
 
     method text() {
         const minutos = (tiempoRestante / 60).truncate(0)

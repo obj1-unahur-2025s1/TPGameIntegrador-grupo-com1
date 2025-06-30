@@ -229,12 +229,13 @@ object robotAzul {
    
     
     method moverIzquierda() {
-        if (!sensor.hayObstaculo() ){
-            posicionAzul = posicionAzul.left(1)
-            self.hayAlgoALaIzquierda()  // Actualizá también al moverte hacia la izquierda
-            game.schedule(300, { self.neutro() })
-            pasosPared = pasosPared + 1 // Incrementa el contador de pasos hacia la pared
+        if (!sensor.hayObstaculo() && !estaDerrotado) {
+        posicionAzul = posicionAzul.left(1)
+        pasosPared = pasosPared + 1
+        self.hayAlgoALaIzquierda()  // SIEMPRE actualizar el sensor
+        game.schedule(300, { self.neutro() })        
         }
+
 }
 
     method mensajeTest() = "Te golpe"
