@@ -78,16 +78,20 @@ object juego {
 */
     }
     method finDelJuego(){
+        const ganadorSoundo = game.sound("victoria.mp3")
         marcadorRondas.reiniciar()
         game.clear()
         if (ganadorFinal == "rojo") {
             pantallaFinal.mostrarFondoRojo()
+            ganadorSoundo.play()
             game.addVisual(pantallaFinal)
         } else if (ganadorFinal == "azul") {
             pantallaFinal.mostrarFondoAzul()
+            ganadorSoundo.play()
             game.addVisual(pantallaFinal)
         }
         keyboard.y().onPressDo{self.reiniciar()}
+        keyboard.n().onPressDo{game.stop()}
     }
 
     method reiniciarRonda() {
@@ -130,7 +134,10 @@ object juego {
     }
 
     method iniciar(){
+        const contar = game.sound("robotic-countdown.mp3")
+
         game.clear()
+        contar.play()
         game.addVisual(fondo3)
         game.schedule(1000, {
             game.clear()
@@ -143,6 +150,7 @@ object juego {
                     game.addVisual(fondofight)
                     game.schedule(1000, {
                     game.sound("campanaInicial.mp3").play()
+                    contar.stop()
                     game.clear()
                     publicoSonido.shouldLoop(true)
                     publicoSonido.play()
@@ -190,31 +198,30 @@ object juego {
     
 
 object fondo3{
-    var property image = "fondo3seg.png"
-    method position() = game.at(0, 0)  
-  
+    var property image = "fondo_seg3_v2.jpg"
+    method position() = game.at(0, 0)   
 }
 object fondo2 {
-    var property image = "fondo2seg.png"
+    var property image = "fondo_seg2.jpg"
     method position() = game.at(0, 0)  
 }
 object fondo1 {
-    var property image = "fondo1seg.png"
+    var property image = "fondo_seg1.jpg"
     method position() = game.at(0, 0)  
 }
 object fondofight {
-    var property image = "fondofight.png"
+    var property image = "fondo_fight.jpg"
     method position() = game.at(0, 0)  
 }
 object menu {
   var property activo = true
-  
+
 
   method iniciar(){
     const musica = game.sound("rocky.mp3")
     game.addVisual(pantallaInicio)
     musica.shouldLoop(true)
-    game.schedule(1000, {musica.play()}) // Reproduce la música de fondo al iniciar el juego
+    game.schedule(1500, {musica.play()}) // Reproduce la música de fondo al iniciar el juego
 
     keyboard.any().onPressDo({
         if (activo){
@@ -287,7 +294,7 @@ object pantallaControles {
 } 
 
 object cronometro {
-    var tiempoRestante = 300  // 4 minutos en segundos
+    var tiempoRestante = 240  // 4 minutos en segundos
     const posicion = game.at(16, 13)  // Ajustá según tu pantalla
 
     method position() = posicion
@@ -318,7 +325,7 @@ object cronometro {
     }
 
     method reiniciar() {
-        tiempoRestante = 30
+        tiempoRestante = 240
     }
 }
 object marcadorRondas {
