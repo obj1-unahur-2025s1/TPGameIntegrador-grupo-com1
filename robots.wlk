@@ -14,8 +14,8 @@ object robotRojo {
     var property estaDerrotado = false
     const sensor = sensorR
     var pasosPared = 0
-    var property habilidad = null 
-   
+    var property habilidad = null
+    var puedeUsarHabilidad = true  
 
     method position() = posicionRojo
     method image() = imagenActual
@@ -39,8 +39,17 @@ object robotRojo {
     }
 
     method usarHabilidad() {
+    if (habilidad != null && puedeUsarHabilidad) {
+        game.say(self, "Usando habilidad")
         habilidad.activar()
-    }   
+        puedeUsarHabilidad = false
+        game.schedule(60000, { puedeUsarHabilidad = true })  // 60 segundos = 1 minuto
+    } else if (!puedeUsarHabilidad) {
+        game.say(self, "Habilidad en enfriamiento... esperá un toque")
+    } else {
+        game.say(self, "No tengo habilidad")
+    }
+}  
 
     method neutro(){
         posicion = "neutro"
@@ -152,7 +161,8 @@ object robotAzul {
     var property estaDerrotado = false
     const sensor = sensorA
     var pasosPared = 0 // Variable para contar los pasos hacia la pared
-    var property habilidad = null  
+    var property habilidad = null
+    var puedeUsarHabilidad = true   
 
     method position() = posicionAzul
     method image() = imagenActual
@@ -176,10 +186,17 @@ object robotAzul {
     }
 
     method usarHabilidad() {
-        if (habilidad != null) {
-            habilidad.activar()
-        }
+    if (habilidad != null && puedeUsarHabilidad) {
+        game.say(self, "Usando habilidad")
+        habilidad.activar()
+        puedeUsarHabilidad = false
+        game.schedule(60000, { puedeUsarHabilidad = true })  // 60 segundos = 1 minuto
+    } else if (!puedeUsarHabilidad) {
+        game.say(self, "Habilidad en enfriamiento... esperá un toque")
+    } else {
+        game.say(self, "No tengo habilidad")
     }
+}
 
     method neutro(){
         posicion = "neutro"
@@ -278,7 +295,6 @@ object robotAzul {
 
     method esRojo() = false
     method esAzul() = true
-   
 }
 
 object sensorR {
@@ -422,5 +438,4 @@ object paleta {
     const property violeta = "800080FF"
     const property blanco = "FFFFFFFF"
 }
-
 

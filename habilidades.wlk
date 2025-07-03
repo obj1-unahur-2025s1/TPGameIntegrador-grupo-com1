@@ -10,19 +10,19 @@ object sobrecalentamientoRojo {
     method position() = posicion
     method image() = imagen
 
-    method activar(unRobot) {
+    method activar() {
         if (!activo) {
             activo = true
             game.addVisual(self)
-            self.cicloDeQuemadura(unRobot)
+            self.cicloDeQuemadura()
             game.schedule(15000, { self.desactivar() })
         }
     }
 
-    method cicloDeQuemadura(unRobot) {
+    method cicloDeQuemadura() {
         if (activo) {
             robotAzul.seQuema()
-            game.schedule(2000, { self.cicloDeQuemadura(unRobot) })
+            game.schedule(2000, { self.cicloDeQuemadura() })
         }
     }
 
@@ -40,19 +40,19 @@ object sobrecalentamientoAzul {
     method position() = posicion
     method image() = imagen
 
-    method activar(unRobot) {
+    method activar() {
         if (!activo) {
             activo = true
             game.addVisual(self)
-            self.cicloDeQuemadura(unRobot)
+            self.cicloDeQuemadura()
             game.schedule(15000, { self.desactivar() })
         }
     }
 
-    method cicloDeQuemadura(unRobot) {
+    method cicloDeQuemadura() {
         if (activo) {
             robotRojo.seQuema()
-            game.schedule(2000, { self.cicloDeQuemadura(unRobot) })
+            game.schedule(2000, { self.cicloDeQuemadura() })
         }
     }
 
@@ -61,6 +61,7 @@ object sobrecalentamientoAzul {
         game.removeVisual(self)
     }
 }
+
 
 //----------------------------------------------------------------------------------------------------
 

@@ -168,7 +168,7 @@ object juego {
                     keyboard.l().onPressDo{robotAzul.golpear()}
                     keyboard.left().onPressDo{robotAzul.moverIzquierda()}
                     keyboard.right().onPressDo{robotAzul.moverDerecha()}
-                    keyboard.up().onPressDo {robotRojo.usarHabilidad()}
+                    keyboard.up().onPressDo {robotAzul.usarHabilidad()}
 
                     game.addVisual(enPausa)
                     keyboard.p().onPressDo{enPausa.alternarPausa()}
@@ -298,12 +298,12 @@ object pantallaHabilidadesRojo {
         keyboard.a().onPressDo { self.cambiarImagen(-1) }
         keyboard.d().onPressDo { self.cambiarImagen(1) }
         keyboard.enter().onPressDo {
-            if (datoH == 3) {
+            if (datoH == 2) {
                 robotRojo.habilidad(sobrecalentamientoRojo)
-            } else if (datoH == 2) {
-                robotRojo.habilidad(cortoCircuito)
             } else if (datoH == 1) {
-                robotRojo.habilidad(oxidacion)
+                robotRojo.habilidad(null)
+            } else if (datoH == 0) {
+                robotRojo.habilidad(null)
             }       
             game.removeVisual(self)
             pantallaHabilidadesAzul.resetearEventos()
@@ -348,12 +348,12 @@ object pantallaHabilidadesAzul {
         keyboard.left().onPressDo { self.cambiarImagen(-1) }
         keyboard.right().onPressDo { self.cambiarImagen(1) }
         keyboard.enter().onPressDo {
-            if (datoH == 3) {
+            if (datoH == 2) {
                 robotAzul.habilidad(sobrecalentamientoAzul)
-            } else if (datoH == 2) {
-                robotAzul.habilidad(cortoCircuito)
             } else if (datoH == 1) {
-                robotAzul.habilidad(oxidacion)
+                robotAzul.habilidad(null)
+            } else if (datoH == 0) {
+                robotAzul.habilidad(null)
             }       
             game.removeVisual(self)
             juego.iniciar()
@@ -448,3 +448,4 @@ object marcadorRondas {
         rondas = 0
     }
 }
+
