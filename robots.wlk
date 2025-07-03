@@ -191,7 +191,7 @@ object robotAzul {
     const sensor = sensorA
     var pasosPared = 0 // Variable para contar los pasos hacia la pared
     var property habilidad = null
-    var puedeUsarHabilidad = true 
+    var property puedeUsarHabilidad = true 
     var cooldownAgachado = 1500
     var cooldownGolpe = 1000
     var cooldownBloqueo = 5000

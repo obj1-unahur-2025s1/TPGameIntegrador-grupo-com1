@@ -7,7 +7,7 @@ object sobrecalentamientoRojo {
     var activo = false
 
     method position() = posicion 
-    method image() = if(!activo) "descarga.png" else "rojoculdown3cuarto.png"
+    method image() = if(robotRojo.puedeUsarHabilidad()) "descarga.png" else "rojoculdown3cuarto.png"
     method activar() {
         if (!activo) {
             activo = true
@@ -36,7 +36,7 @@ object sobrecalentamientoAzul {
     var activo = false
 
     method position() = posicion 
-    method image() = if(!activo) "habilidadisp.png" else "azulculdown.png"
+    method image() = if(robotAzul.puedeUsarHabilidad()) "habilidadisp.png" else "azulculdown.png"
 
     method activar() {
         if (!activo) {
@@ -69,7 +69,7 @@ object oxidacionR {
     var activo = false
 
     method position() = posicion 
-    method image() = if(!activo) "descarga.png" else "rojoculdown3cuarto.png"
+    method image() = if(robotRojo.puedeUsarHabilidad()) "descarga.png" else "rojoculdown3cuarto.png"
 
     method activar() {
     if (!activo) {
@@ -88,15 +88,15 @@ object oxidacionR {
 object oxidacionA {
     var property posicion = game.at(13, 0)
     var activo = false
-    var enCooldown = false
+    
 
     method position() = posicion
-    method image() = if(enCooldown) "azulculdown.png" else "habilidadisp.png"
+    method image() = if(!robotAzul.puedeUsarHabilidad()) "azulculdown.png" else "habilidadisp.png"
 
     method activar() {
         if (!activo) {
             activo = true
-            enCooldown = true
+         
             game.addVisual(self)
             robotRojo.seOxido()
             game.schedule(15000, {
@@ -104,8 +104,7 @@ object oxidacionA {
               
             })
         
-        game.schedule(60000, {activo = false})
-                
+       
             }
         }
     }
@@ -119,7 +118,7 @@ object cortoCircuitoR {
 
     method position() = posicion 
     method image() = imagen
-    var property  imagen = if(!activo) "descarga.png" else "rojoculdown3cuarto.png"
+    var property  imagen = if(robotRojo.puedeUsarHabilidad()) "descarga.png" else "rojoculdown3cuarto.png"
 
     method activar() {
         if (!activo) {
@@ -138,7 +137,7 @@ object cortoCircuitoA {
     var activo = false
 
     method position() = posicion 
-    method image() = if(!activo) "habilidadisp.png" else "azulculdown.png"
+    method image() = if(robotAzul.puedeUsarHabilidad()) "habilidadisp.png" else "azulculdown.png"
     method activar() {
         if (!activo) {
         activo = true
