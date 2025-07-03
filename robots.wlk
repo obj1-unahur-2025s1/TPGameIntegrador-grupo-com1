@@ -15,7 +15,7 @@ object robotRojo {
     const sensor = sensorR
     var pasosPared = 0
     var property habilidad = null 
-    var cooldown = 15   
+   
 
     method position() = posicionRojo
     method image() = imagenActual
@@ -139,7 +139,6 @@ object robotRojo {
 
     method esRojo() = true
     method esAzul() = false
- 
 }
 
 object robotAzul {
@@ -153,8 +152,7 @@ object robotAzul {
     var property estaDerrotado = false
     const sensor = sensorA
     var pasosPared = 0 // Variable para contar los pasos hacia la pared
-    var property habilidad = null
-    var cooldown = 15  
+    var property habilidad = null  
 
     method position() = posicionAzul
     method image() = imagenActual

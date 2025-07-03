@@ -279,32 +279,38 @@ object pantallaControles {
 } 
 
 object pantallaHabilidadesRojo {
-    var property imagenActual = "fondo_habR_Q.jpg"
+    var property imagenActual = "rojohabilidades1.png"
     const posicion = game.origin()
     var property datoH = 0
+    var property eventosConfigurados = false
 
     method position() = posicion
     method image() = imagenActual
 
     method iniciar() {
-        datoH = 0
-        self.actualizarImagen()
-        game.addVisual(self)
+    game.clear()    
+    datoH = 0
+    self.actualizarImagen()
+    game.addVisual(self)
 
+    if (!eventosConfigurados) {
+        eventosConfigurados = true  // Lo marcás para no repetir
         keyboard.a().onPressDo { self.cambiarImagen(-1) }
         keyboard.d().onPressDo { self.cambiarImagen(1) }
         keyboard.enter().onPressDo {
-            if (datoH == 0) {
-                robotRojo.habilidad(sobrecalentamiento)
-            } else if (datoH == 1) {
-                robotRojo.habilidad(oxidacion)
+            if (datoH == 3) {
+                robotRojo.habilidad(sobrecalentamientoRojo)
             } else if (datoH == 2) {
                 robotRojo.habilidad(cortoCircuito)
+            } else if (datoH == 1) {
+                robotRojo.habilidad(oxidacion)
             }       
-            game.schedule(500, { pantallaHabilidadesAzul.iniciar() })
             game.removeVisual(self)
+            pantallaHabilidadesAzul.resetearEventos()
+            game.schedule(100, {pantallaHabilidadesAzul.iniciar()})
         }
     }
+}
 
     method cambiarImagen(direccion) {
         datoH = (datoH + direccion).max(0).min(2)  // Rango entre 0 y 2
@@ -313,42 +319,47 @@ object pantallaHabilidadesRojo {
 
     method actualizarImagen() {
         if (datoH == 0) {
-            imagenActual = "fondo_habR_Q.jpg"
+            imagenActual = "rojohabilidades1.png"
         } else if (datoH == 1) {
-            imagenActual = "fondo_habR_O.jpg"
+            imagenActual = "rojohabilidades2.png"
         } else if (datoH == 2) {
-            imagenActual = "fondo_habR_E.jpg"
+            imagenActual = "rojohabilidades3.png"
         }
     }
 }
 
 object pantallaHabilidadesAzul {
-    var property imagenActual = "fondo_habA_Q.jpg"
+    var property imagenActual = "azulhabilidades1.png"
     const posicion = game.origin()
     var property datoH = 0
+    var property eventosConfigurados = false
 
     method position() = posicion
     method image() = imagenActual
 
     method iniciar() {
-        datoH = 0
-        self.actualizarImagen()
-        game.addVisual(self)
+    game.clear()
+    datoH = 0
+    self.actualizarImagen()
+    game.addVisual(self)
 
-        keyboard.a().onPressDo { self.cambiarImagen(-1) }
-        keyboard.d().onPressDo { self.cambiarImagen(1) }
+    if (!eventosConfigurados) {
+        eventosConfigurados = true  // Lo marcás para no repetir
+        keyboard.left().onPressDo { self.cambiarImagen(-1) }
+        keyboard.right().onPressDo { self.cambiarImagen(1) }
         keyboard.enter().onPressDo {
-            if (datoH == 0) {
-                robotRojo.habilidad(sobrecalentamiento)
-            } else if (datoH == 1) {
-                robotRojo.habilidad(oxidacion)
+            if (datoH == 3) {
+                robotAzul.habilidad(sobrecalentamientoAzul)
             } else if (datoH == 2) {
-                robotRojo.habilidad(cortoCircuito)
-            }         
-            game.schedule(500, { juego.iniciar() })
+                robotAzul.habilidad(cortoCircuito)
+            } else if (datoH == 1) {
+                robotAzul.habilidad(oxidacion)
+            }       
             game.removeVisual(self)
+            juego.iniciar()
         }
     }
+}
 
     method cambiarImagen(direccion) {
         datoH = (datoH + direccion).max(0).min(2)  // Rango entre 0 y 2
@@ -357,13 +368,17 @@ object pantallaHabilidadesAzul {
 
     method actualizarImagen() {
         if (datoH == 0) {
-            imagenActual = "fondo_habA_Q.jpg"
+            imagenActual = "azulhabilidades1.png"
         } else if (datoH == 1) {
-            imagenActual = "fondo_habA_O.jpg"
+            imagenActual = "azulhabilidades2.png"
         } else if (datoH == 2) {
-            imagenActual = "fondo_habA_E.jpg"
+            imagenActual = "azulhabilidades3.png"
         }
     }
+
+    method resetearEventos() {
+    eventosConfigurados = false
+}
 }
 
 

@@ -2,13 +2,13 @@ import robots.*
 import juego.*
 import wollok.game.*
 
-object sobrecalentamiento {
-    const imagen = "Sobrecalentamiento.png"
-    const posicion = game.center() 
+object sobrecalentamientoRojo {
+    const imagen = "SobrecalientamientoR.png"
+    const posicion = game.center()
     var activo = false
 
-    method position() = posicion 
-    method image() = imagen 
+    method position() = posicion
+    method image() = imagen
 
     method activar(unRobot) {
         if (!activo) {
@@ -20,29 +20,49 @@ object sobrecalentamiento {
     }
 
     method cicloDeQuemadura(unRobot) {
-    if (activo) {
-        unRobot.seQuema()
-        game.schedule(2000, { self.cicloDeQuemadura(unRobot) }) // se llama a sí mismo cada 2 seg
-    }
-}
-
-    method reducirSalud(unRobot) {
         if (activo) {
-            if (unRobot.esRojo()) {
-                robotAzul.seQuema()
-            } else {
-                robotRojo.seQuema()
-            }
-        }    
+            robotAzul.seQuema()
+            game.schedule(2000, { self.cicloDeQuemadura(unRobot) })
+        }
     }
 
     method desactivar() {
-        if (activo) {
-            activo = false
-            game.removeVisual(self)
-        }
+        activo = false
+        game.removeVisual(self)
     }
 }
+
+object sobrecalentamientoAzul {
+    const imagen = "SobrecalientamientoA.png"
+    const posicion = game.center()
+    var activo = false
+
+    method position() = posicion
+    method image() = imagen
+
+    method activar(unRobot) {
+        if (!activo) {
+            activo = true
+            game.addVisual(self)
+            self.cicloDeQuemadura(unRobot)
+            game.schedule(15000, { self.desactivar() })
+        }
+    }
+
+    method cicloDeQuemadura(unRobot) {
+        if (activo) {
+            robotRojo.seQuema()
+            game.schedule(2000, { self.cicloDeQuemadura(unRobot) })
+        }
+    }
+
+    method desactivar() {
+        activo = false
+        game.removeVisual(self)
+    }
+}
+
+//----------------------------------------------------------------------------------------------------
 
 object oxidacion {
     const imagen = "Oxidacion.png"
