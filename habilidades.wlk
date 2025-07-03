@@ -65,8 +65,8 @@ object sobrecalentamientoAzul {
 
 //----------------------------------------------------------------------------------------------------
 
-object oxidacion {
-    const imagen = "Oxidacion.png"
+object oxidacionR {
+    const imagen = "OxidacionR.png"
     const posicion = game.center() // Ajustá según tu pantalla
     var activo = false
 
@@ -74,17 +74,38 @@ object oxidacion {
     method imagen() = imagen 
 
     method activar() {
-        if (!activo) {
-            activo = true
-            game.addVisual(imagen)
-        }
-    }
-
-    method desactivar() {
-        if (activo) {
+    if (!activo) {
+        activo = true
+        game.addVisual(self)
+        robotAzul.seOxido()
+        game.schedule(15000, {
+            robotAzul.seLubrico()
+            game.removeVisual(self)
             activo = false
-            game.removeVisual(imagen)
-        }
+        })
+    }
+    }
+}
+
+object oxidacionA {
+    const imagen = "OxidacionA.png"
+    const posicion = game.center() // Ajustá según tu pantalla
+    var activo = false
+
+    method position() = posicion 
+    method imagen() = imagen 
+
+    method activar() {
+    if (!activo) {
+        activo = true
+        game.addVisual(self)
+        robotRojo.seOxido()
+        game.schedule(15000, {
+            robotRojo.seLubrico()
+            game.removeVisual(self)
+            activo = false
+        })
+    }
     }
 }
 

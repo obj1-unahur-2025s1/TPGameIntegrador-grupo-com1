@@ -15,7 +15,10 @@ object robotRojo {
     const sensor = sensorR
     var pasosPared = 0
     var property habilidad = null
-    var puedeUsarHabilidad = true  
+    var puedeUsarHabilidad = true 
+    var cooldownAgachado = 1500
+    var cooldownGolpe = 1000
+    var cooldownBloqueo = 5000   
 
     method position() = posicionRojo
     method image() = imagenActual
@@ -73,7 +76,7 @@ object robotRojo {
             posicion = "agachado"
             imagenActual = "RobotRojoAgacharTest1.png"
             game.schedule(1000,{self.neutro()})
-            game.schedule(1500, {puedeAgachar = true}) 
+            game.schedule(cooldownAgachado, {puedeAgachar = true}) 
         }      
     }
 
@@ -93,7 +96,7 @@ object robotRojo {
             imagenActual = "RobotRojoGolpearTest1.png" // Si no hay obstáculo, vuelve a la imagen normal
         }
         game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
-        game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
+        game.schedule(cooldownGolpe, { puedeGolpear = true }) // cooldown de 1 segundo
     }
     }
     method bloquear(){
@@ -102,7 +105,7 @@ object robotRojo {
             posicion = "bloqueando"
             imagenActual = "RobotRojoBloquearTest1.png"
             game.schedule(1000,{self.neutro()})
-            game.schedule(5000, {puedeBloquear = true})            
+            game.schedule(cooldownBloqueo, {puedeBloquear = true})            
         }               
     }
 
@@ -145,6 +148,18 @@ object robotRojo {
         salud -= 1.max(0)
         vidaRojo.salud(salud) // Actualiza la salud en el objeto de
     }
+    
+    method seOxido(){
+        game.say(self, "¡Me oxidé!")
+        cooldownAgachado = 5000
+        cooldownGolpe = 3000
+        cooldownBloqueo = 8000
+    }
+    method seLubrico() {
+        cooldownAgachado = 1500
+        cooldownGolpe = 1000
+        cooldownBloqueo = 5000
+    }
 
     method esRojo() = true
     method esAzul() = false
@@ -162,7 +177,10 @@ object robotAzul {
     const sensor = sensorA
     var pasosPared = 0 // Variable para contar los pasos hacia la pared
     var property habilidad = null
-    var puedeUsarHabilidad = true   
+    var puedeUsarHabilidad = true 
+    var cooldownAgachado = 1500
+    var cooldownGolpe = 1000
+    var cooldownBloqueo = 5000  
 
     method position() = posicionAzul
     method image() = imagenActual
@@ -220,7 +238,7 @@ object robotAzul {
             posicion = "agachado"
             imagenActual = "RobotAzulAgacharTest1.png"
             game.schedule(1000,{self.neutro()})
-            game.schedule(1500, {puedeAgachar = true})             
+            game.schedule(cooldownAgachado, {puedeAgachar = true})             
         }        
     }
 
@@ -240,7 +258,7 @@ object robotAzul {
             imagenActual = "RobotAzulGolpearTest3.png" // Si no hay obstáculo, vuelve a la imagen normal
         }
         game.schedule(500, { self.neutro() })        // tiempo que dura el golpe
-        game.schedule(1000, { puedeGolpear = true }) // cooldown de 1 segundo
+        game.schedule(cooldownGolpe, { puedeGolpear = true }) // cooldown de 1 segundo
     }
     }
     method bloquear(){
@@ -249,7 +267,7 @@ object robotAzul {
             posicion = "bloqueando"
             imagenActual = "RobotAzulBloquearTest1.png"
             game.schedule(1000,{self.neutro()})
-            game.schedule(5000, {puedeBloquear = true})              
+            game.schedule(cooldownBloqueo, {puedeBloquear = true})              
         }                  
     }
 
@@ -291,6 +309,18 @@ object robotAzul {
     method seQuema() {
         salud -= 1.max(0)
         vidaAzul.salud(salud) // Actualiza la salud en el objeto de
+    }
+
+    method seOxido(){
+        game.say(self, "¡Me oxidé!")
+        cooldownAgachado = 5000
+        cooldownGolpe = 3000
+        cooldownBloqueo = 8000
+    }
+    method seLubrico() {
+        cooldownAgachado = 1500
+        cooldownGolpe = 1000
+        cooldownBloqueo = 5000
     }
 
     method esRojo() = false
