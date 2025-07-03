@@ -139,13 +139,7 @@ object robotRojo {
 
     method esRojo() = true
     method esAzul() = false
-    method congelar() {
-      if(cooldown == 0)
-        robotAzul.imagenActual = "RobotAzulCongelado.png"
-        game.schedule(2000, { robotAzul.neutro() }) // Vuelve a la posición neutra después de 2 segundos
-              
-      
-    }
+ 
 }
 
 object robotAzul {
@@ -200,7 +194,7 @@ object robotAzul {
             estaDerrotado = true
             posicion = "derrotado"
             imagenActual = "RobotAzulDerrotado.png"
-            resorteSonido.play()robotAzul.imagenActual() = "RobotAzulCongelado.png"
+            resorteSonido.play()
             game.schedule(2000, { juego.finDeRonda("rojo") }) // Rojo gana la ronda
     }
     }
@@ -286,12 +280,7 @@ object robotAzul {
 
     method esRojo() = false
     method esAzul() = true
-    method congelar() {
-      if(cooldown == 0())
-        robotRojo.imagenActual = "RobotAzulCongelado.png"
-        game.schedule(2000, { self.neutro() }) // Vuelve a la posición neutra después de 2 segundos
-      
-    }
+   
 }
 
 object sensorR {
