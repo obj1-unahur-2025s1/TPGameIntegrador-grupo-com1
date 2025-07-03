@@ -54,15 +54,18 @@ object robotRojo {
 
     method usarHabilidad() {
     if (habilidad != null && puedeUsarHabilidad) {
-        game.say(self, "Usando habilidad")
+        //game.say(self, "Usando habilidad")
         habilidad.activar()
         puedeUsarHabilidad = false
         game.schedule(60000, { puedeUsarHabilidad = true })  // 60 segundos = 1 minuto
-    } else if (!puedeUsarHabilidad) {
-        game.say(self, "Habilidad en enfriamiento... esperá un toque")
+    } 
+    /*
+else if (!puedeUsarHabilidad) {
+       // game.say(self, "Habilidad en enfriamiento... esperá un toque")
     } else {
-        game.say(self, "No tengo habilidad")
+       // game.say(self, "No tengo habilidad")
     }
+    */
 }  
 
     method neutro(){
@@ -144,7 +147,7 @@ object robotRojo {
 
     method bajarSalud(){
         if (posicion == "neutro" || posicion == "golpeando") {
-            salud -= 10.max(0)
+            salud -= 2.max(0)
             game.sound("golpe.wav").play()
         } else if (posicion == "agachado") {
             salud -= 0 // Si está agachado, no recibe daño
@@ -161,10 +164,13 @@ object robotRojo {
     }
 
     method seOxido(){
-        game.say(self, "¡Me oxidé!")
+        const oxidacion = game.sound("oxidacion.mp3")
+        //game.say(self, "¡Me oxidé!")
+        oxidacion.play()
         cooldownAgachado = 5000
         cooldownGolpe = 3000
         cooldownBloqueo = 8000
+        game.schedule(3000, {oxidacion.stop()})
     }
     method seLubrico() {
         cooldownAgachado = 1500
@@ -172,9 +178,13 @@ object robotRojo {
         cooldownBloqueo = 5000
     }
     method seParalizo() {
-        game.say(self, "¡Me paralicé!")
+        //game.say(self, "¡Me paralicé!")
+        const cortoCircuito = game.sound("cortocircuito.mp3")
+        cortoCircuito.play()
         estaParalizado = true
-        game.schedule(15000, { estaParalizado = false })
+        game.schedule(15000, { 
+        estaParalizado = false 
+        cortoCircuito.stop() }) // Detiene el sonido después de 15 segundos
     }
 
     method esRojo() = true
@@ -227,15 +237,16 @@ object robotAzul {
 
     method usarHabilidad() {
     if (habilidad != null && puedeUsarHabilidad) {
-        game.say(self, "Usando habilidad")
+        //game.say(self, "Usando habilidad")
         habilidad.activar()
         puedeUsarHabilidad = false
         game.schedule(60000, { puedeUsarHabilidad = true })  // 60 segundos = 1 minuto
-    } else if (!puedeUsarHabilidad) {
+    } /*
+    else if (!puedeUsarHabilidad) {
         game.say(self, "Habilidad en enfriamiento... esperá un toque")
     } else {
         game.say(self, "No tengo habilidad")
-    }
+    }*/
 }
 
     method neutro(){
@@ -314,7 +325,7 @@ object robotAzul {
 
     method bajarSalud(){
         if (posicion == "neutro" || posicion == "golpeando") {
-            salud -= 10.max(0)
+            salud -= 2.max(0)
             game.sound("golpe.wav").play()
         } else if (posicion == "agachado") {
             salud -= 0 // Si está agachado, no recibe daño
@@ -326,15 +337,19 @@ object robotAzul {
     }
 
     method seQuema() {
+        
         salud -= 1.max(0)
         vidaAzul.salud(salud) // Actualiza la salud en el objeto de
     }
 
     method seOxido(){
-        game.say(self, "¡Me oxidé!")
+        const oxidacion = game.sound("oxidacion.mp3")
+        //game.say(self, "¡Me oxidé!")
+        oxidacion.play()
         cooldownAgachado = 5000
         cooldownGolpe = 3000
         cooldownBloqueo = 8000
+        game.schedule(3000, {oxidacion.stop()})
     }
     method seLubrico() {
         cooldownAgachado = 1500
@@ -342,9 +357,12 @@ object robotAzul {
         cooldownBloqueo = 5000
     }
     method seParalizo() {
-        game.say(self, "¡Me paralicé!")
+        const cortoCircuito = game.sound("cortocircuito.mp3")
+        cortoCircuito.play()
+       // game.say(self, "¡Me paralicé!")
         estaParalizado = true
-        game.schedule(15000, { estaParalizado = false })
+        game.schedule(15000, { estaParalizado = false
+        cortoCircuito.stop() }) // Detiene el sonido después de 15 segundos
     }
 
     method esRojo() = false
@@ -426,8 +444,8 @@ object vidaRojo {
 
 
     
-    method text() = "Salud: " + salud.toString()
-    method textColor() = paleta.blanco()
+    //method text() = "Salud: " + salud.toString()
+    //method textColor() = paleta.blanco()
     
     
 }
@@ -478,8 +496,8 @@ object vidaAzul {
         return imagenActual
     }
     
-    method text() = "Salud: " + salud.toString()
-    method textColor() = paleta.blanco()
+    //method text() = "Salud: " + salud.toString()
+    //method textColor() = paleta.blanco()
     
 }
 

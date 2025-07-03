@@ -334,7 +334,7 @@ object pantallaControles {
 } 
 
 object pantallaHabilidadesRojo {
-    var property imagenActual = "rojohabilidades1.png"
+    var property imagenActual = "habilidadesR1V3.png"
     const posicion = game.origin()
     var property datoH = 0
     var property eventosConfigurados = false
@@ -374,17 +374,17 @@ object pantallaHabilidadesRojo {
 
     method actualizarImagen() {
         if (datoH == 0) {
-            imagenActual = "rojohabilidades1.png"
+            imagenActual = "habilidadesR1V3.png"
         } else if (datoH == 1) {
-            imagenActual = "rojohabilidades2.png"
+            imagenActual = "habilidadesR2V3.jpg"
         } else if (datoH == 2) {
-            imagenActual = "rojohabilidades3.png"
+            imagenActual = "habilidadesR3V3.jpg"
         }
     }
 }
 
 object pantallaHabilidadesAzul {
-    var property imagenActual = "azulhabilidades1.png"
+    var property imagenActual = "habilidadesA1V3.png"
     const posicion = game.origin()
     var property datoH = 0
     var property eventosConfigurados = false
@@ -423,11 +423,11 @@ object pantallaHabilidadesAzul {
 
     method actualizarImagen() {
         if (datoH == 0) {
-            imagenActual = "azulhabilidades1.png"
+            imagenActual = "habilidadesA1V3.png"
         } else if (datoH == 1) {
-            imagenActual = "azulhabilidades2.png"
+            imagenActual = "habilidadesA2V3.jpg"
         } else if (datoH == 2) {
-            imagenActual = "azulhabilidades3.png"
+            imagenActual = "habilidadesA3V3.jpg"
         }
     }
 

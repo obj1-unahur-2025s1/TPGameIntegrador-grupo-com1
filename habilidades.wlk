@@ -81,9 +81,13 @@ object sobrecalentamientoRojo {
 
     method cicloDeQuemadura() {
         if (activo) {
-            game.say(robotAzul, "¡Quemado!")
+            const sonidoQuemadura = game.sound("sobrecalientamiento.mp3")
+            sonidoQuemadura.play()
+            //game.say(robotAzul, "¡Quemado!")
             robotAzul.seQuema()
-            game.schedule(2000, { self.cicloDeQuemadura() })
+            game.schedule(2000, { 
+            self.cicloDeQuemadura()
+            sonidoQuemadura.stop() })
     }
 }
 
@@ -111,9 +115,13 @@ object sobrecalentamientoAzul {
 
     method cicloDeQuemadura() {
         if (activo) {
-            game.say(robotAzul, "¡Quemado!")
+            const sonidoQuemadura = game.sound("sobrecalientamiento.mp3")
+            sonidoQuemadura.play()
+           // game.say(robotAzul, "¡Quemado!")
             robotRojo.seQuema()
-            game.schedule(2000, { self.cicloDeQuemadura() })
+            game.schedule(2000, { 
+            self.cicloDeQuemadura() 
+            sonidoQuemadura.stop()})
     }
 }
 
