@@ -1,5 +1,6 @@
 import wollok.game.*
 import juego.*
+import habilidades.*
 
 
 object robotRojo {
@@ -13,11 +14,11 @@ object robotRojo {
     var property estaDerrotado = false
     const sensor = sensorR
     var pasosPared = 0
-    
+    var property habilidad = null    
 
     method position() = posicionRojo
     method image() = imagenActual
-    method salud() = salud
+    //method salud() = salud
 
     method reiniciar() {
         salud = 100
@@ -35,6 +36,10 @@ object robotRojo {
         const proximaPosicion = posicionRojo.right(1)
         sensor.position(proximaPosicion)
     }
+
+    method usarHabilidad() {
+        habilidad.activar()
+    }   
 
     method neutro(){
         posicion = "neutro"
@@ -126,6 +131,11 @@ object robotRojo {
         vidaRojo.salud(salud) // Actualiza la salud en el objeto de vida
     }
 
+    method seQuema() {
+        salud -= 1.max(0)
+        vidaRojo.salud(salud) // Actualiza la salud en el objeto de
+    }
+
     method esRojo() = true
     method esAzul() = false
 }
@@ -141,6 +151,7 @@ object robotAzul {
     var property estaDerrotado = false
     const sensor = sensorA
     var pasosPared = 0 // Variable para contar los pasos hacia la pared
+    var property habilidad = null
 
     method position() = posicionAzul
     method image() = imagenActual
@@ -161,6 +172,12 @@ object robotAzul {
     method hayAlgoALaIzquierda() {    
         const proximaPosicion = posicionAzul.left(1)
         sensor.position(proximaPosicion)
+    }
+
+    method usarHabilidad() {
+        if (habilidad != null) {
+            habilidad.activar()
+        }
     }
 
     method neutro(){
@@ -226,7 +243,6 @@ object robotAzul {
             pasosPared = pasosPared - 1
         }
     }
-   
     
     method moverIzquierda() {
         if (!sensor.hayObstaculo() && !estaDerrotado) {
@@ -252,6 +268,11 @@ object robotAzul {
             game.sound("golpe.wav").play()
         }
         vidaAzul.salud(salud) // Actualiza la salud en el objeto de vida
+    }
+
+    method seQuema() {
+        salud -= 1.max(0)
+        vidaAzul.salud(salud) // Actualiza la salud en el objeto de
     }
 
     method esRojo() = false

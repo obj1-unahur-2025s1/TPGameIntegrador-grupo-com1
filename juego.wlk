@@ -1,3 +1,4 @@
+import habilidades.*
 import wollok.game.*
 import robots.*
 
@@ -54,28 +55,6 @@ object juego {
             game.schedule(2000, { self.reiniciarRonda() })
         }
 
-/*
-        if (rondasJugadas >= maxRondas) {
-            ganadorFinal = ganador   // <--- Esto ya está bien
-            self.finDelJuego()
-        } else {
-            game.schedule(2000, { self.reiniciarRonda() })
-        }
-    }
-
-        if (rondasJugadas >= maxRondas) {
-            if (rondasGanadasRojo > rondasGanadasAzul) {
-                ganadorFinal = "rojo"
-            } else if (rondasGanadasAzul > rondasGanadasRojo) {
-                ganadorFinal = "azul"
-            } else {
-                ganadorFinal = "empate"
-            }
-            self.finDelJuego()
-        } else {
-            game.schedule(2000, { self.reiniciarRonda() })
-        }
-*/
     }
     method finDelJuego(){
         const ganadorSoundo = game.sound("victoria.mp3")
@@ -182,11 +161,15 @@ object juego {
                     keyboard.e().onPressDo{robotRojo.golpear()}
                     keyboard.a().onPressDo{robotRojo.moverIzquierda()}
                     keyboard.d().onPressDo{robotRojo.moverDerecha()}
+                    keyboard.w().onPressDo {robotRojo.usarHabilidad()}
+
                     keyboard.k().onPressDo{robotAzul.bloquear()}
                     keyboard.down().onPressDo{robotAzul.agachar()}
                     keyboard.l().onPressDo{robotAzul.golpear()}
                     keyboard.left().onPressDo{robotAzul.moverIzquierda()}
                     keyboard.right().onPressDo{robotAzul.moverDerecha()}
+                    keyboard.up().onPressDo {robotRojo.usarHabilidad()}
+
                     game.addVisual(enPausa)
                     keyboard.p().onPressDo{enPausa.alternarPausa()}
                     })
@@ -214,32 +197,36 @@ object fondofight {
     method position() = game.at(0, 0)  
 }
 object menu {
-  var property activo = true
+    var property activo = true
 
+    method iniciar(){
+        const musica = game.sound("rocky.mp3")
+        game.addVisual(pantallaInicio)
+        musica.shouldLoop(true)
+        game.schedule(1500, {musica.play()}) // Reproduce la música de fondo al iniciar el juego
 
-  method iniciar(){
-    const musica = game.sound("rocky.mp3")
-    game.addVisual(pantallaInicio)
-    musica.shouldLoop(true)
-    game.schedule(1500, {musica.play()}) // Reproduce la música de fondo al iniciar el juego
-
-    keyboard.any().onPressDo({
+        keyboard.any().onPressDo({
         if (activo){
             game.schedule(500, {musica.stop()}) // Detiene la música de fondo al iniciar el juego
             game.removeVisual(pantallaInicio)
             game.addVisual(pantallaControles)
             
             activo = false
-            game.schedule(5000, {juego.iniciar()})
+            //game.schedule(5000, {juego.iniciar()})
+            keyboard.enter().onPressDo {           
+                game.schedule(500, {pantallaHabilidadesRojo.iniciar()})
+                game.removeVisual(pantallaControles)
+            }
+            
         }
     })
-  }
+    }
 }
 object enPausa {
-  var property pausa = false
-  method alternarPausa() {
+    var property pausa = false
+    method alternarPausa() {
     pausa = !pausa
-  }
+    }
     method image() {
         if (pausa) {
         return "pausa.png"
@@ -282,16 +269,103 @@ object pantallaFinal {
 }
 
 object pantallaInicio {
-  var property image = "pantallaInicial.png"
-  method position() = game.at(0, 0)
-
+    var property image = "pantallaInicial.png"
+    method position() = game.at(0, 0)
 }
 
 object pantallaControles {
-  var property image = "controles.png"
-  method position() = game.at(0, 0)
-
+    var property image = "controles.png"
+    method position() = game.at(0, 0)
 } 
+
+object pantallaHabilidadesRojo {
+    var property imagenActual = "fondo_habR_Q.jpg"
+    const posicion = game.origin()
+    var property datoH = 0
+
+    method position() = posicion
+    method image() = imagenActual
+
+    method iniciar() {
+        datoH = 0
+        self.actualizarImagen()
+        game.addVisual(self)
+
+        keyboard.a().onPressDo { self.cambiarImagen(-1) }
+        keyboard.d().onPressDo { self.cambiarImagen(1) }
+        keyboard.enter().onPressDo {
+            if (datoH == 0) {
+                robotRojo.habilidad(sobrecalentamiento)
+            } else if (datoH == 1) {
+                robotRojo.habilidad(oxidacion)
+            } else if (datoH == 2) {
+                robotRojo.habilidad(cortoCircuito)
+            }       
+            game.schedule(500, { pantallaHabilidadesAzul.iniciar() })
+            game.removeVisual(self)
+        }
+    }
+
+    method cambiarImagen(direccion) {
+        datoH = (datoH + direccion).max(0).min(2)  // Rango entre 0 y 2
+        self.actualizarImagen()
+    }
+
+    method actualizarImagen() {
+        if (datoH == 0) {
+            imagenActual = "fondo_habR_Q.jpg"
+        } else if (datoH == 1) {
+            imagenActual = "fondo_habR_O.jpg"
+        } else if (datoH == 2) {
+            imagenActual = "fondo_habR_E.jpg"
+        }
+    }
+}
+
+object pantallaHabilidadesAzul {
+    var property imagenActual = "fondo_habA_Q.jpg"
+    const posicion = game.origin()
+    var property datoH = 0
+
+    method position() = posicion
+    method image() = imagenActual
+
+    method iniciar() {
+        datoH = 0
+        self.actualizarImagen()
+        game.addVisual(self)
+
+        keyboard.a().onPressDo { self.cambiarImagen(-1) }
+        keyboard.d().onPressDo { self.cambiarImagen(1) }
+        keyboard.enter().onPressDo {
+            if (datoH == 0) {
+                robotRojo.habilidad(sobrecalentamiento)
+            } else if (datoH == 1) {
+                robotRojo.habilidad(oxidacion)
+            } else if (datoH == 2) {
+                robotRojo.habilidad(cortoCircuito)
+            }         
+            game.schedule(500, { juego.iniciar() })
+            game.removeVisual(self)
+        }
+    }
+
+    method cambiarImagen(direccion) {
+        datoH = (datoH + direccion).max(0).min(2)  // Rango entre 0 y 2
+        self.actualizarImagen()
+    }
+
+    method actualizarImagen() {
+        if (datoH == 0) {
+            imagenActual = "fondo_habA_Q.jpg"
+        } else if (datoH == 1) {
+            imagenActual = "fondo_habA_O.jpg"
+        } else if (datoH == 2) {
+            imagenActual = "fondo_habA_E.jpg"
+        }
+    }
+}
+
 
 object cronometro {
     var tiempoRestante = 240  // 4 minutos en segundos
