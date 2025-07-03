@@ -9,12 +9,13 @@ object robotRojo {
     var puedeAgachar = true
     var puedeBloquear = true      
     var posicionRojo = game.at(1,1)
-    var imagenActual = "RobotRojoNeutroTest1.png"
+    var property imagenActual = "RobotRojoNeutroTest1.png"
     var property posicion = "neutro"
     var property estaDerrotado = false
     const sensor = sensorR
     var pasosPared = 0
-    var property habilidad = null    
+    var property habilidad = null 
+    var cooldown = 15   
 
     method position() = posicionRojo
     method image() = imagenActual
@@ -138,6 +139,13 @@ object robotRojo {
 
     method esRojo() = true
     method esAzul() = false
+    method congelar() {
+      if(cooldown == 0)
+        robotAzul.imagenActual = "RobotAzulCongelado.png"
+        game.schedule(2000, { robotAzul.neutro() }) // Vuelve a la posición neutra después de 2 segundos
+              
+      
+    }
 }
 
 object robotAzul {
@@ -146,12 +154,13 @@ object robotAzul {
     var puedeAgachar = true
     var puedeBloquear = true 
     var posicionAzul = game.at(22,1)
-    var imagenActual = "RobotAzulNeutroTest1.png"
+    var property imagenActual = "RobotAzulNeutroTest1.png"
     var property posicion = "neutro"
     var property estaDerrotado = false
     const sensor = sensorA
     var pasosPared = 0 // Variable para contar los pasos hacia la pared
     var property habilidad = null
+    var cooldown = 15  
 
     method position() = posicionAzul
     method image() = imagenActual
@@ -191,7 +200,7 @@ object robotAzul {
             estaDerrotado = true
             posicion = "derrotado"
             imagenActual = "RobotAzulDerrotado.png"
-            resorteSonido.play()
+            resorteSonido.play()robotAzul.imagenActual() = "RobotAzulCongelado.png"
             game.schedule(2000, { juego.finDeRonda("rojo") }) // Rojo gana la ronda
     }
     }
@@ -277,6 +286,12 @@ object robotAzul {
 
     method esRojo() = false
     method esAzul() = true
+    method congelar() {
+      if(cooldown == 0())
+        robotRojo.imagenActual = "RobotAzulCongelado.png"
+        game.schedule(2000, { self.neutro() }) // Vuelve a la posición neutra después de 2 segundos
+      
+    }
 }
 
 object sensorR {
