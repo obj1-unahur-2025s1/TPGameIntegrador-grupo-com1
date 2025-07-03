@@ -163,6 +163,9 @@ object robotRojo {
 
     method esRojo() = true
     method esAzul() = false
+    method habilitarGolpe() {
+        puedeGolpear = true
+    }
 }
 
 object robotAzul {
@@ -325,6 +328,9 @@ object robotAzul {
 
     method esRojo() = false
     method esAzul() = true
+    method habilitarGolpe() {
+        puedeGolpear = true
+    }
 }
 
 object sensorR {

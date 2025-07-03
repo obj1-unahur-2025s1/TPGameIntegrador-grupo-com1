@@ -1,0 +1,114 @@
+import robots.*
+
+describe "Tests Robot Rojo" {
+    test "robot azul golpea a robot rojo y le baja la salud" {
+        robots.robotRojo.reiniciar()
+        robots.robotAzul.reiniciar()
+        robots.sensorA.hayObstaculo(true)
+        robots.robotAzul.golpear()
+        assert.equals(90, robots.robotRojo.salud())
+    }
+
+    test "robot rojo se mueve a la derecha" {
+        robots.robotRojo.reiniciar()
+        const posicionInicial = robots.robotRojo.position()
+        robots.robotRojo.moverDerecha()
+        const posicionFinal = robots.robotRojo.position()
+        assert.notEquals(posicionInicial, posicionFinal)
+    }
+
+    test "robot rojo pierde vida, se reinicia y recupera salud" {
+        robots.robotRojo.bajarSalud()
+        robots.robotRojo.bajarSalud()
+        robots.robotRojo.bajarSalud()
+        robots.robotRojo.bajarSalud()
+        robots.robotRojo.bajarSalud()
+        assert.equals(50, robots.robotRojo.salud())
+        robots.robotRojo.reiniciar()
+        assert.equals(100, robots.robotRojo.salud())
+    }
+
+    test "robot rojo recibe varios golpes y es derrotado" {
+        robots.robotRojo.reiniciar()
+        robots.robotAzul.reiniciar()
+        robots.sensorA.hayObstaculo(true)
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        robots.robotAzul.habilitarGolpe()
+        robots.robotAzul.golpear()
+        assert.equals(0, robots.robotRojo.salud())
+        vidaRojo.image() // Este metodo ejecuta el mensaje "derrotar"
+        assert.that(robots.robotRojo.estaDerrotado())
+    }
+}
+    //Test Robot azul
+describe "Tests Robot Azul" {
+    test "robot rojo golpea a robot azul y le baja la salud" {
+        robots.robotAzul.reiniciar()
+        robots.robotRojo.reiniciar()
+        robots.sensorR.hayObstaculo(true)
+        robots.robotRojo.golpear()
+        assert.equals(90, robots.robotAzul.salud())
+    }}
+
+    test "robot azul se mueve a la izquierda" {
+        robots.robotAzul.reiniciar()
+        const posicionInicial = robots.robotAzul.position()
+        robots.robotAzul.moverIzquierda()
+        const posicionFinal = robots.robotAzul.position()
+        assert.notEquals(posicionInicial, posicionFinal)
+    }
+
+    test "robot azul pierde vida, se reinicia y recupera salud" {
+        robots.robotAzul.bajarSalud()
+        robots.robotAzul.bajarSalud()
+        robots.robotAzul.bajarSalud()
+        robots.robotAzul.bajarSalud()
+        robots.robotAzul.bajarSalud()
+        assert.equals(50, robots.robotAzul.salud())
+        robots.robotAzul.reiniciar()
+        assert.equals(100, robots.robotAzul.salud())
+    }
+
+    test "robot azul recibe varios golpes y es derrotado" {
+        robots.robotAzul.reiniciar()
+        robots.robotRojo.reiniciar()
+        robots.sensorR.hayObstaculo(true)
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        robots.robotRojo.habilitarGolpe()
+        robots.robotRojo.golpear()
+        assert.equals(0, robots.robotAzul.salud())
+        vidaAzul.image() // Este metodo ejecuta el mensaje "derrotar"
+        assert.that(robots.robotAzul.estaDerrotado())
+    }
