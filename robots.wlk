@@ -2,10 +2,6 @@ import wollok.game.*
 import juego.*
 import habilidades.*
 
-import wollok.game.*
-import juego.*
-import habilidades.*
-
 
 object robotRojo {
     var property salud = 100
@@ -182,7 +178,7 @@ else if (!puedeUsarHabilidad) {
         const cortoCircuito = game.sound("cortocircuito.mp3")
         cortoCircuito.play()
         estaParalizado = true
-        game.schedule(15000, { 
+        game.schedule(10000, { 
         estaParalizado = false 
         cortoCircuito.stop() }) // Detiene el sonido después de 15 segundos
     }
@@ -361,7 +357,7 @@ object robotAzul {
         cortoCircuito.play()
        // game.say(self, "¡Me paralicé!")
         estaParalizado = true
-        game.schedule(15000, { estaParalizado = false
+        game.schedule(10000, { estaParalizado = false
         cortoCircuito.stop() }) // Detiene el sonido después de 15 segundos
     }
 

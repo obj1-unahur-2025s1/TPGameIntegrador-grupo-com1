@@ -75,7 +75,7 @@ object sobrecalentamientoRojo {
             activo = true
             game.addVisual(self)
             self.cicloDeQuemadura()
-            game.schedule(15000, { self.desactivar() })
+            game.schedule(20000, { self.desactivar() })
         }
     }
 
@@ -109,7 +109,7 @@ object sobrecalentamientoAzul {
             activo = true
             game.addVisual(self)
             self.cicloDeQuemadura()
-            game.schedule(15000, { self.desactivar() })
+            game.schedule(20000, { self.desactivar() })
         }
     }
 
