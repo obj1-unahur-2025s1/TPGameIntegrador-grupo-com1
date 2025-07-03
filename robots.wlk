@@ -15,7 +15,7 @@ object robotRojo {
     const sensor = sensorR
     var pasosPared = 0
     var property habilidad = null
-    var puedeUsarHabilidad = true 
+    var property puedeUsarHabilidad = true 
     var cooldownAgachado = 1500
     var cooldownGolpe = 1000
     var cooldownBloqueo = 5000  
@@ -353,6 +353,7 @@ object robotAzul {
     method habilitarGolpe() {
         puedeGolpear = true
     }
+      method habilidadcooldown() = "azullisto.png"
 }
 
 object sensorR {

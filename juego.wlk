@@ -146,6 +146,12 @@ object juego {
                     game.addVisual(vidaAzul)
                     game.addVisual(cronometro)
                     game.addVisual(marcadorRondas)
+                    if (robotRojo.habilidad() != null) {
+                        game.addVisual(robotRojo.habilidad())
+                    }
+                    if (robotAzul.habilidad() != null) {
+                        game.addVisual(robotAzul.habilidad())
+                    }
                     game.onTick(1000,"tiempo",{cronometro.disminuir()})
 
                     game.whenCollideDo(sensorR, { elemento =>
@@ -203,14 +209,39 @@ object fondofight {
 }
 object menu {
     var property activo = true
-
+    var property modo = 1
     method iniciar(){
         const musica = game.sound("rocky.mp3")
         game.addVisual(pantallaInicio)
         musica.shouldLoop(true)
         game.schedule(1500, {musica.play()}) // Reproduce la música de fondo al iniciar el juego
-
-        keyboard.any().onPressDo({
+        keyboard.down().onPressDo(
+            {
+                if (activo) {
+                    if (modo == 1) {
+                        pantallaInicio.image("pantallainicial2.png")
+                        modo = 2
+                    } else {
+                        pantallaInicio.image("pantallainicial.png")
+                        modo = 1
+                    }
+                }
+            }
+        )
+        keyboard.up().onPressDo(
+            {
+                if (activo) {
+                    if (modo == 1) {
+                        pantallaInicio.image("pantallainicial2.png")
+                        modo = 2
+                    } else {
+                        pantallaInicio.image("pantallainicial.png")
+                        modo = 1
+                    }
+                }
+            }
+        )
+        keyboard.enter().onPressDo({
         if (activo){
             game.schedule(500, {musica.stop()}) // Detiene la música de fondo al iniciar el juego
             game.removeVisual(pantallaInicio)
@@ -218,8 +249,13 @@ object menu {
             
             activo = false
             //game.schedule(5000, {juego.iniciar()})
+           
             keyboard.enter().onPressDo {           
-                game.schedule(500, {pantallaHabilidadesRojo.iniciar()})
+                game.schedule(500, {if(modo ==2){
+                pantallaHabilidadesRojo.iniciar() 
+                }
+                else
+                juego.iniciar() })
                 game.removeVisual(pantallaControles)
             }
             
@@ -274,7 +310,7 @@ object pantallaFinal {
 }
 
 object pantallaInicio {
-    var property image = "pantallaInicial.png"
+    var property image = "pantallainicial.png"
     method position() = game.at(0, 0)
 }
 
@@ -298,7 +334,7 @@ object pantallaHabilidadesRojo {
     self.actualizarImagen()
     game.addVisual(self)
 
-    if (!eventosConfigurados) {
+    if (!eventosConfigurados ) {
         eventosConfigurados = true  // Lo marcás para no repetir
         keyboard.a().onPressDo { self.cambiarImagen(-1) }
         keyboard.d().onPressDo { self.cambiarImagen(1) }
@@ -348,7 +384,7 @@ object pantallaHabilidadesAzul {
     self.actualizarImagen()
     game.addVisual(self)
 
-    if (!eventosConfigurados) {
+    if (!eventosConfigurados ) {
         eventosConfigurados = true  // Lo marcás para no repetir
         keyboard.left().onPressDo { self.cambiarImagen(-1) }
         keyboard.right().onPressDo { self.cambiarImagen(1) }

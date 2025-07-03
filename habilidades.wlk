@@ -3,20 +3,19 @@ import juego.*
 import wollok.game.*
 
 object sobrecalentamientoRojo {
-    const imagen = "SobrecalientamientoR.png"
-    const posicion = game.center()
+    var property  posicion = game.at(3, 0) // Ajustá según tu pantalla
     var activo = false
 
-    method position() = posicion
-    method image() = imagen
-
+    method position() = posicion 
+    method image() = if(!activo) "descarga.png" else "rojoculdown3cuarto.png"
     method activar() {
         if (!activo) {
             activo = true
             game.addVisual(self)
             self.cicloDeQuemadura()
-            game.schedule(15000, { self.desactivar() })
+            game.schedule(45000, { self.desactivar() })
         }
+       
     }
 
     method cicloDeQuemadura() {
@@ -28,17 +27,16 @@ object sobrecalentamientoRojo {
 
     method desactivar() {
         activo = false
-        game.removeVisual(self)
+ 
     }
 }
 
 object sobrecalentamientoAzul {
-    const imagen = "SobrecalientamientoA.png"
-    const posicion = game.center()
+    var property  posicion = game.at(13, 0) // Ajustá según tu pantalla
     var activo = false
 
-    method position() = posicion
-    method image() = imagen
+    method position() = posicion 
+    method image() = if(!activo) "habilidadisp.png" else "azulculdown.png"
 
     method activar() {
         if (!activo) {
@@ -47,6 +45,7 @@ object sobrecalentamientoAzul {
             self.cicloDeQuemadura()
             game.schedule(15000, { self.desactivar() })
         }
+        game.schedule(45000, {activo = false})
     }
 
     method cicloDeQuemadura() {
@@ -58,7 +57,7 @@ object sobrecalentamientoAzul {
 
     method desactivar() {
         activo = false
-        game.removeVisual(self)
+      
     }
 }
 
@@ -66,91 +65,90 @@ object sobrecalentamientoAzul {
 //----------------------------------------------------------------------------------------------------
 
 object oxidacionR {
-    const imagen = "OxidacionR.png"
-    const posicion = game.center() // Ajustá según tu pantalla
+    var property  posicion = game.at(3, 0) // Ajustá según tu pantalla
     var activo = false
 
     method position() = posicion 
-    method imagen() = imagen 
+    method image() = if(!activo) "descarga.png" else "rojoculdown3cuarto.png"
 
     method activar() {
     if (!activo) {
         activo = true
-        game.addVisual(self)
         robotAzul.seOxido()
         game.schedule(15000, {
             robotAzul.seLubrico()
-            game.removeVisual(self)
-            activo = false
+      
+            
         })
+        game.schedule(60000, {activo = false})
     }
     }
 }
 
 object oxidacionA {
-    const imagen = "OxidacionA.png"
-    const posicion = game.center() // Ajustá según tu pantalla
+    var property posicion = game.at(13, 0)
     var activo = false
+    var enCooldown = false
 
-    method position() = posicion 
-    method imagen() = imagen 
+    method position() = posicion
+    method image() = if(enCooldown) "azulculdown.png" else "habilidadisp.png"
 
     method activar() {
-    if (!activo) {
-        activo = true
-        game.addVisual(self)
-        robotRojo.seOxido()
-        game.schedule(15000, {
-            robotRojo.seLubrico()
-            game.removeVisual(self)
-            activo = false
-        })
+        if (!activo) {
+            activo = true
+            enCooldown = true
+            game.addVisual(self)
+            robotRojo.seOxido()
+            game.schedule(15000, {
+                robotRojo.seLubrico()
+              
+            })
+        
+        game.schedule(60000, {activo = false})
+                
+            }
+        }
     }
-    }
-}
+
 
 //-------------------------------------------------------------------------------------------
 
 object cortoCircuitoR {
-    const imagen = "CortoCircuito.png"
-    const posicion = game.at(16, 13) // Ajustá según tu pantalla
+    var property  posicion = game.at(3, 0) // Ajustá según tu pantalla
     var activo = false
 
     method position() = posicion 
-    method imagen() = imagen 
+    method image() = imagen
+    var property  imagen = if(!activo) "descarga.png" else "rojoculdown3cuarto.png"
 
     method activar() {
         if (!activo) {
         activo = true
-        game.addVisual(self)
         robotAzul.seParalizo()
-        game.schedule(15000, {
-            game.removeVisual(self)
+        game.schedule(60000, {
             activo = false
+
         })
     }
     }
 }
 
 object cortoCircuitoA {
-    const imagen = "CortoCircuito.png"
-    const posicion = game.at(16, 13) // Ajustá según tu pantalla
+    var property  posicion = game.at(13, 0) // Ajustá según tu pantalla
     var activo = false
 
     method position() = posicion 
-    method imagen() = imagen 
-
+    method image() = if(!activo) "habilidadisp.png" else "azulculdown.png"
     method activar() {
         if (!activo) {
         activo = true
-        game.addVisual(self)
         robotRojo.seParalizo()
-        game.schedule(15000, {
-            game.removeVisual(self)
+        game.schedule(60000, {
             activo = false
         })
     }
     }
+
 }
 
 
