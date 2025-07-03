@@ -86,7 +86,10 @@ object juego {
         vidaRojo.imagenActual("Rojo100V2.png")
         vidaAzul.imagenActual("Azul100V2.png")
         pantallaFinal.mostrarImagen(false)
-        // NO reiniciar el marcador de rondas ni el contador de rondasJugadas
+        game.removeVisual(sobrecalentamientoRojo)
+        game.removeVisual(oxidacionR)
+        game.removeVisual(cortoCircuitoR)
+        
 
         // Volver a agregar los visuales y eventos
         self.iniciar()
@@ -107,6 +110,8 @@ object juego {
         vidaAzul.imagenActual("Azul100V2.png")
         pantallaFinal.mostrarImagen(false)
         menu.activo(true)
+        pantallaHabilidadesRojo.eventosConfigurados(false)
+        pantallaHabilidadesAzul.eventosConfigurados(false)
         rondasJugadas = 0
         ganadorFinal = null
         game.schedule(500, { menu.iniciar() })
@@ -279,7 +284,7 @@ object pantallaControles {
 } 
 
 object pantallaHabilidadesRojo {
-    var property imagenActual = "rojohabilidades1.png"
+    var property imagenActual = "rojohabilidad1.png"
     const posicion = game.origin()
     var property datoH = 0
     var property eventosConfigurados = false
@@ -301,9 +306,9 @@ object pantallaHabilidadesRojo {
             if (datoH == 2) {
                 robotRojo.habilidad(sobrecalentamientoRojo)
             } else if (datoH == 1) {
-                robotRojo.habilidad(null)
+                robotRojo.habilidad(cortoCircuitoR)
             } else if (datoH == 0) {
-                robotRojo.habilidad(null)
+                robotRojo.habilidad(oxidacionR)
             }       
             game.removeVisual(self)
             pantallaHabilidadesAzul.resetearEventos()
@@ -319,17 +324,17 @@ object pantallaHabilidadesRojo {
 
     method actualizarImagen() {
         if (datoH == 0) {
-            imagenActual = "rojohabilidades1.png"
+            imagenActual = "rojohabilidad1.png"
         } else if (datoH == 1) {
-            imagenActual = "rojohabilidades2.png"
+            imagenActual = "rojohabilidad2.png"
         } else if (datoH == 2) {
-            imagenActual = "rojohabilidades3.png"
+            imagenActual = "rojohabilidad3.png"
         }
     }
 }
 
 object pantallaHabilidadesAzul {
-    var property imagenActual = "azulhabilidades1.png"
+    var property imagenActual = "azulhabilidad1.png"
     const posicion = game.origin()
     var property datoH = 0
     var property eventosConfigurados = false
@@ -351,9 +356,9 @@ object pantallaHabilidadesAzul {
             if (datoH == 2) {
                 robotAzul.habilidad(sobrecalentamientoAzul)
             } else if (datoH == 1) {
-                robotAzul.habilidad(null)
+                robotAzul.habilidad(cortoCircuitoA)
             } else if (datoH == 0) {
-                robotAzul.habilidad(null)
+                robotAzul.habilidad(oxidacionA)
             }       
             game.removeVisual(self)
             juego.iniciar()
@@ -368,11 +373,11 @@ object pantallaHabilidadesAzul {
 
     method actualizarImagen() {
         if (datoH == 0) {
-            imagenActual = "azulhabilidades1.png"
+            imagenActual = "azulhabilidad1.png"
         } else if (datoH == 1) {
-            imagenActual = "azulhabilidades2.png"
+            imagenActual = "azulhabilidad2.png"
         } else if (datoH == 2) {
-            imagenActual = "azulhabilidades3.png"
+            imagenActual = "azulhabilidad3.png"
         }
     }
 

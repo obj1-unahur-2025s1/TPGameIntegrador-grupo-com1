@@ -18,7 +18,8 @@ object robotRojo {
     var puedeUsarHabilidad = true 
     var cooldownAgachado = 1500
     var cooldownGolpe = 1000
-    var cooldownBloqueo = 5000   
+    var cooldownBloqueo = 5000  
+    var estaParalizado = false 
 
     method position() = posicionRojo
     method image() = imagenActual
@@ -34,6 +35,11 @@ object robotRojo {
         posicion = "neutro"
         estaDerrotado = false
         sensor.position(posicionRojo)
+        puedeUsarHabilidad = true
+        cooldownAgachado = 1500
+        cooldownGolpe = 1000
+        cooldownBloqueo = 5000
+        estaParalizado = false
     }
 
     method hayAlgoALaDerecha() {    
@@ -71,7 +77,7 @@ object robotRojo {
     }
 
     method agachar(){
-        if (puedeAgachar && !estaDerrotado) {
+        if (puedeAgachar && !estaDerrotado && !estaParalizado) {
             puedeAgachar = false
             posicion = "agachado"
             imagenActual = "RobotRojoAgacharTest1.png"
@@ -81,7 +87,7 @@ object robotRojo {
     }
 
     method golpear(){       
-        if (puedeGolpear && !estaDerrotado) {
+        if (puedeGolpear && !estaDerrotado && !estaParalizado) {
             puedeGolpear = false
             posicion = "golpeando"               
         if(sensor.hayObstaculo()) {
@@ -100,7 +106,7 @@ object robotRojo {
     }
     }
     method bloquear(){
-        if(puedeBloquear && !estaDerrotado) {
+        if(puedeBloquear && !estaDerrotado && !estaParalizado) {
             puedeBloquear = false
             posicion = "bloqueando"
             imagenActual = "RobotRojoBloquearTest1.png"
@@ -110,7 +116,7 @@ object robotRojo {
     }
 
     method moverDerecha() {
-    if (!sensor.hayObstaculo() && !estaDerrotado) {
+    if (!sensor.hayObstaculo() && !estaDerrotado && !estaParalizado) {
         posicionRojo = posicionRojo.right(1)
         pasosPared = pasosPared + 1
     }
@@ -119,7 +125,7 @@ object robotRojo {
 }
 
     method moverIzquierda() {
-        if (!estaDerrotado && pasosPared !== 0){
+        if (!estaDerrotado && pasosPared !== 0 && !estaParalizado)  {
             posicionRojo = posicionRojo.left(1)
             self.hayAlgoALaDerecha()  // Actualizá también al moverte hacia la izquierda
             game.schedule(300, { self.neutro() })
@@ -148,7 +154,7 @@ object robotRojo {
         salud -= 1.max(0)
         vidaRojo.salud(salud) // Actualiza la salud en el objeto de
     }
-    
+
     method seOxido(){
         game.say(self, "¡Me oxidé!")
         cooldownAgachado = 5000
@@ -160,10 +166,15 @@ object robotRojo {
         cooldownGolpe = 1000
         cooldownBloqueo = 5000
     }
+    method seParalizo() {
+        game.say(self, "¡Me paralicé!")
+        estaParalizado = true
+        game.schedule(15000, { estaParalizado = false })
+    }
 
     method esRojo() = true
     method esAzul() = false
-    method habilitarGolpe() {
+       method habilitarGolpe() {
         puedeGolpear = true
     }
 }
@@ -183,7 +194,8 @@ object robotAzul {
     var puedeUsarHabilidad = true 
     var cooldownAgachado = 1500
     var cooldownGolpe = 1000
-    var cooldownBloqueo = 5000  
+    var cooldownBloqueo = 5000
+    var estaParalizado = false  
 
     method position() = posicionAzul
     method image() = imagenActual
@@ -199,6 +211,11 @@ object robotAzul {
         posicion = "neutro"
         estaDerrotado = false
         sensor.position(posicionAzul)
+        puedeUsarHabilidad = true
+        cooldownAgachado = 1500
+        cooldownGolpe = 1000
+        cooldownBloqueo = 5000
+        estaParalizado = false
     }
 
     method hayAlgoALaIzquierda() {    
@@ -236,7 +253,7 @@ object robotAzul {
     }
 
     method agachar(){
-        if (puedeAgachar && !estaDerrotado) {
+        if (puedeAgachar && !estaDerrotado && !estaParalizado) {
             puedeAgachar = false
             posicion = "agachado"
             imagenActual = "RobotAzulAgacharTest1.png"
@@ -246,7 +263,7 @@ object robotAzul {
     }
 
     method golpear(){       
-        if (puedeGolpear && !estaDerrotado) {
+        if (puedeGolpear && !estaDerrotado && !estaParalizado) {
             puedeGolpear = false
             posicion = "golpeando"               
         if(sensor.hayObstaculo() && !estaDerrotado) {
@@ -265,7 +282,7 @@ object robotAzul {
     }
     }
     method bloquear(){
-        if(puedeBloquear && !estaDerrotado) {
+        if(puedeBloquear && !estaDerrotado && !estaParalizado) {
             puedeBloquear = false
             posicion = "bloqueando"
             imagenActual = "RobotAzulBloquearTest1.png"
@@ -275,7 +292,7 @@ object robotAzul {
     }
 
     method moverDerecha() {  
-        if (!estaDerrotado && pasosPared !== 0)  { 
+        if (!estaDerrotado && pasosPared !== 0 && !estaParalizado)  { 
             posicionAzul = posicionAzul.right(1)  
             self.hayAlgoALaIzquierda()  // SIEMPRE actualizar el sensor
             game.schedule(300, { self.neutro() })
@@ -284,7 +301,7 @@ object robotAzul {
     }
     
     method moverIzquierda() {
-        if (!sensor.hayObstaculo() && !estaDerrotado) {
+        if (!sensor.hayObstaculo() && !estaDerrotado && !estaParalizado) {
         posicionAzul = posicionAzul.left(1)
         pasosPared = pasosPared + 1
         self.hayAlgoALaIzquierda()  // SIEMPRE actualizar el sensor
@@ -324,6 +341,11 @@ object robotAzul {
         cooldownAgachado = 1500
         cooldownGolpe = 1000
         cooldownBloqueo = 5000
+    }
+    method seParalizo() {
+        game.say(self, "¡Me paralicé!")
+        estaParalizado = true
+        game.schedule(15000, { estaParalizado = false })
     }
 
     method esRojo() = false

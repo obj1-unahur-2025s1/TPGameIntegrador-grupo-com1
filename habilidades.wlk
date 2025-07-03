@@ -109,7 +109,9 @@ object oxidacionA {
     }
 }
 
-object cortoCircuito {
+//-------------------------------------------------------------------------------------------
+
+object cortoCircuitoR {
     const imagen = "CortoCircuito.png"
     const posicion = game.at(16, 13) // Ajustá según tu pantalla
     var activo = false
@@ -119,15 +121,36 @@ object cortoCircuito {
 
     method activar() {
         if (!activo) {
-            activo = true
-            game.addVisual(imagen)
-        }
-    }
-
-    method desactivar() {
-        if (activo) {
+        activo = true
+        game.addVisual(self)
+        robotAzul.seParalizo()
+        game.schedule(15000, {
+            game.removeVisual(self)
             activo = false
-            game.removeVisual(imagen)
-        }
+        })
+    }
     }
 }
+
+object cortoCircuitoA {
+    const imagen = "CortoCircuito.png"
+    const posicion = game.at(16, 13) // Ajustá según tu pantalla
+    var activo = false
+
+    method position() = posicion 
+    method imagen() = imagen 
+
+    method activar() {
+        if (!activo) {
+        activo = true
+        game.addVisual(self)
+        robotRojo.seParalizo()
+        game.schedule(15000, {
+            game.removeVisual(self)
+            activo = false
+        })
+    }
+    }
+}
+
+
