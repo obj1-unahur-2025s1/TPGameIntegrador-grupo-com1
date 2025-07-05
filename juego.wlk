@@ -300,7 +300,7 @@ object enPausa {
     }
     method image() {
         if (pausa) {
-        return "controles.png"
+        return "controles1.png"
         } else {
         return null
         }
@@ -345,7 +345,7 @@ object pantallaInicio {
 }
 
 object pantallaControles {
-    var property image = "controles.png"
+    var property image = "controles1.png"
     method position() = game.at(0, 0)
 } 
 
