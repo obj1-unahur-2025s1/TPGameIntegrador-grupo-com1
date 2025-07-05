@@ -262,15 +262,31 @@ object menu {
             game.addVisual(pantallaControles)
             
             activo = false
-            //game.schedule(5000, {juego.iniciar()})
-            keyboard.enter().onPressDo {           
-                game.schedule(500, {if(modo ==2){
-                pantallaHabilidadesRojo.iniciar() 
+
+            //inicia solo
+            game.schedule(8000, {
+                if(modo ==2){
+                    pantallaHabilidadesRojo.iniciar() 
                 }
-                else
-                juego.iniciar() })
+                else{
+                    juego.iniciar()
+                }
                 game.removeVisual(pantallaControles)
-            }
+                
+                })
+
+
+
+
+            //iniciar con el enter
+            //keyboard.enter().onPressDo {           
+            //    game.schedule(500, {if(modo ==2){
+           //     pantallaHabilidadesRojo.iniciar() 
+            //    }
+            //    else
+            //    juego.iniciar() })
+            //    game.removeVisual(pantallaControles)
+           // }
             
         }
     })
@@ -284,7 +300,7 @@ object enPausa {
     }
     method image() {
         if (pausa) {
-        return "pausa.png"
+        return "controles.png"
         } else {
         return null
         }
