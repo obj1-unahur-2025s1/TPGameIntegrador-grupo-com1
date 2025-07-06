@@ -27,10 +27,10 @@ object juego {
         }
 
         // Chequeo si hay un ganador final
-        if (rondasJugadas == 2 && rondasGanadasRojo == 2){
+        if (rondasGanadasAzul == 0 && rondasGanadasRojo == 2){
             ganadorFinal = "rojo"
             self.finDelJuego()
-        } else if (rondasJugadas == 2 && rondasGanadasAzul == 2) {
+        } else if (rondasGanadasRojo == 0 && rondasGanadasAzul == 2) {
             ganadorFinal = "azul"
             self.finDelJuego()
         } else if (rondasGanadasAzul == 3) {
@@ -61,6 +61,7 @@ object juego {
         }
         keyboard.y().onPressDo{self.reiniciar()}
         keyboard.n().onPressDo{game.stop()}
+        
     }
 
     method reiniciarRonda() {
@@ -103,8 +104,11 @@ object juego {
         pantallaHabilidadesRojo.eventosConfigurados(false)
         pantallaHabilidadesAzul.eventosConfigurados(false)
         rondasJugadas = 0
+        rondasGanadasRojo = 0
+        rondasGanadasAzul = 0
         ganadorFinal = null
         game.schedule(500, { menu.iniciar() })
+        
     }
 
     method iniciar(){

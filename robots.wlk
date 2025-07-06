@@ -143,7 +143,7 @@ else if (!puedeUsarHabilidad) {
 
     method bajarSalud(){
         if (posicion == "neutro" || posicion == "golpeando") {
-            salud -= 2.max(0)
+            salud -= 0.max(10)
             game.sound("golpe.wav").play()
         } else if (posicion == "agachado") {
             salud -= 0 // Si está agachado, no recibe daño
@@ -325,7 +325,7 @@ object robotAzul {
 
     method bajarSalud(){
         if (posicion == "neutro" || posicion == "golpeando") {
-            salud -= 2.max(0)
+            salud -= 0.max(10)
             game.sound("golpe.wav").play()
         } else if (posicion == "agachado") {
             salud -= 0 // Si está agachado, no recibe daño
@@ -411,39 +411,16 @@ object vidaRojo {
         salud = suSalud
     }
     method image() {
-        imagenActual = "Rojo100V2.png"
-        if (salud <= 90) {
-            imagenActual = "Rojo90V2.png"
-        }
-        if (salud <= 80) {
-            imagenActual = "Rojo80V2.png"
-        }
-        if (salud <= 70) {
-            imagenActual = "Rojo70V2.png"
-        }
-        if (salud <= 60) {
-            imagenActual = "Rojo60V2.png"
-        }
-        if (salud <= 50) {
-            imagenActual = "Rojo50V2.png"
-        }
-        if (salud <= 40) {
-            imagenActual = "Rojo40V2.png"
-        }
-        if (salud <= 30) {
-            imagenActual = "Rojo30V2.png"
-        }
-        if (salud <= 20) {
-            imagenActual = "Rojo20V2.png"
-        }
-        if (salud <= 10) {
-            imagenActual = "Rojo10V2.png"
+        
+        if (salud % 10 == 0) {
+            imagenActual = "Rojo"+salud+"V2.png"
+            
         }
         if (salud <= 0) {
-            imagenActual = "Rojo0V2.png"
             robotRojo.derrotado()
         }
         return imagenActual
+        
     }
 
 
@@ -465,39 +442,16 @@ object vidaAzul {
     }
 
     method image() {
-        imagenActual = "Azul100V2.png"
-        if (salud <= 90) {
-            imagenActual = "Azul90V2.png"
-        }
-        if (salud <= 80) {
-            imagenActual = "Azul80V2.png"
-        }
-        if (salud <= 70) {
-            imagenActual = "Azul70V2.png"
-        }
-        if (salud <= 60) {
-            imagenActual = "Azul60V2.png"
-        }
-        if (salud <= 50) {
-            imagenActual = "Azul50V2.png"
-        }
-        if (salud <= 40) {
-            imagenActual = "Azul40V2.png"
-        }
-        if (salud <= 30) {
-            imagenActual = "Azul30V2.png"
-        }
-        if (salud <= 20) {
-            imagenActual = "Azul20V2.png"
-        }
-        if (salud <= 10) {
-            imagenActual = "Azul10V2.png"
+        
+        if (salud % 10 == 0) {
+            imagenActual = "Azul"+salud+"V2.png"
+            
         }
         if (salud <= 0) {
-            imagenActual = "Azul0V2.png"
             robotAzul.derrotado()
         }
         return imagenActual
+        
     }
     
     //method text() = "Salud: " + salud.toString()
