@@ -155,6 +155,7 @@ object juego {
                     game.addVisual(vidaAzul)
                     game.addVisual(cronometro)
                     game.addVisual(marcadorRondas)
+                    game.addVisual(testVisual)
                     game.onTick(1000,"tiempo",{cronometro.disminuir()})
 
                     game.whenCollideDo(sensorR, { elemento =>
@@ -197,6 +198,7 @@ object juego {
         }
     }
     
+
 
 object fondo3{
     var property image = "fondo_seg3_v2.jpg"
