@@ -8,44 +8,58 @@ object juego {
     var rondasGanadasRojo = 0
     var rondasGanadasAzul = 0
     var ganadorFinal = null
+    var rondaFinalizada = false
+
+    method verificarGanador() {
+    if (robotRojo.estaDerrotado() && robotAzul.estaDerrotado()) {
+        self.finDeRonda("empate")
+    } else if (robotRojo.estaDerrotado()) {
+        self.finDeRonda("azul")
+    } else if (robotAzul.estaDerrotado()) {
+        self.finDeRonda("rojo")
+    }
+}
 
     method finDeRonda(ganador) {
-        marcadorRondas.aumentarRonda()
-        rondasJugadas += 1
-        if (ganador == "rojo") {
-            rondasGanadasRojo += 1
-            marcadorRondas.aumentarRondaGanadaRojo()
+        if (rondaFinalizada) {
+            rondaFinalizada = true
+        }else {
+            marcadorRondas.aumentarRonda()
+            rondasJugadas += 1
 
-        } else if (ganador == "azul") {
-            rondasGanadasAzul += 1
-            marcadorRondas.aumentarRondaGanadaAzul()
+            if (ganador == "rojo") {
+                rondasGanadasRojo += 1
+                marcadorRondas.aumentarRondaGanadaRojo()
+            } else if (ganador == "azul") {
+                rondasGanadasAzul += 1
+                marcadorRondas.aumentarRondaGanadaAzul()
+            } else if (ganador == "empate") {
+                pantallaFinal.mostrarEmpate()
+                game.addVisual(pantallaFinal)
+                game.schedule(4000, { self.reiniciarRonda() })
+            }
 
-        } else if (ganador == "empate") {
-            pantallaFinal.mostrarEmpate()
-            game.addVisual(pantallaFinal)
-            game.schedule(4000, { self.reiniciarRonda() })
-        }
+        // lógica de victoria...
+            if (rondasGanadasAzul == 0 && rondasGanadasRojo == 2){
+                ganadorFinal = "rojo"
+                self.finDelJuego()
+            } else if (rondasGanadasRojo == 0 && rondasGanadasAzul == 2) {
+                ganadorFinal = "azul"
+                self.finDelJuego()
+            } else if (rondasGanadasAzul == 3) {
+                ganadorFinal = "azul"
+                self.finDelJuego() 
+            } else if (rondasGanadasRojo == 3) {
+                ganadorFinal = "rojo"
+                self.finDelJuego()
+            } else if (ganador != "empate") {
+                game.schedule(2000, { self.reiniciarRonda() })
+            }
 
-        // Chequeo si hay un ganador final
-        if (rondasGanadasAzul == 0 && rondasGanadasRojo == 2){
-            ganadorFinal = "rojo"
-            self.finDelJuego()
-        } else if (rondasGanadasRojo == 0 && rondasGanadasAzul == 2) {
-            ganadorFinal = "azul"
-            self.finDelJuego()
-        } else if (rondasGanadasAzul == 3) {
-            ganadorFinal = "azul"
-            self.finDelJuego() 
-        } else if (rondasGanadasRojo == 3) {
-            ganadorFinal = "rojo"
-            self.finDelJuego()
-
-            // en Caso de Empate (ningún jugador ganó 3 rondas)
-        } else if (ganador != "empate"){
-            game.schedule(2000, { self.reiniciarRonda() })
         }
 
     }
+
     method finDelJuego(){
         const ganadorSoundo = game.sound("victoria.mp3")
         marcadorRondas.reiniciar()
@@ -66,14 +80,15 @@ object juego {
 
     method reiniciarRonda() {
         game.clear()
+        rondaFinalizada = false
         publicoSonido.stop()
         robotRojo.reiniciar()
         robotAzul.reiniciar()
         sensorR.hayObstaculo(false)
         sensorA.hayObstaculo(false)
         cronometro.reiniciar()
-        vidaRojo.salud(100)
-        vidaAzul.salud(100)
+        //vidaRojo.salud(100)
+        //vidaAzul.salud(100)
         vidaRojo.imagenActual("Rojo100V2.png")
         vidaAzul.imagenActual("Azul100V2.png")
         pantallaFinal.mostrarImagen(false)
@@ -95,8 +110,8 @@ object juego {
         sensorR.hayObstaculo(false)
         sensorA.hayObstaculo(false)
         cronometro.reiniciar()
-        vidaRojo.salud(100)
-        vidaAzul.salud(100)
+        //vidaRojo.salud(100)
+        //vidaAzul.salud(100)
         vidaRojo.imagenActual("Rojo100V2.png")
         vidaAzul.imagenActual("Azul100V2.png")
         pantallaFinal.mostrarImagen(false)
@@ -169,9 +184,13 @@ object juego {
                     keyboard.right().onPressDo{robotAzul.moverDerecha()}
                     keyboard.up().onPressDo {robotAzul.usarHabilidad()}
 
+                    keyboard.y().onPressDo{self.reiniciar()}
+
                     game.addVisual(enPausa)
                     keyboard.p().onPressDo{enPausa.alternarPausa()}
                     })
+
+                    
                 })
         })
         })

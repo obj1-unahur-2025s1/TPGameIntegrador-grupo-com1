@@ -2,69 +2,9 @@ import robots.*
 import juego.*
 import wollok.game.*
 
-/*
-object sobrecalentamientoRojo {
-    const imagen = "SobrecalientamientoR.png"
-    const posicion = game.center()
-    var activo = false
-
-    method position() = posicion
-    method image() = imagen
-
-    method activar() {
-        if (!activo) {
-            activo = true
-            game.addVisual(self)
-            self.cicloDeQuemadura()
-            game.schedule(15000, { self.desactivar() })
-        }
-    }
-
-    method cicloDeQuemadura() {
-        if (activo) {
-            robotAzul.seQuema()
-            game.schedule(2000, { self.cicloDeQuemadura() })
-        }
-    }
-
-    method desactivar() {
-        activo = false
-        game.removeVisual(self)
-    }
-}
-
-object sobrecalentamientoAzul {
-    const imagen = "SobrecalientamientoA.png"
-    const posicion = game.center()
-    var activo = false
-
-    method position() = posicion
-    method image() = imagen
-
-    method activar() {
-        if (!activo) {
-            activo = true
-            game.addVisual(self)
-            self.cicloDeQuemadura()
-            game.schedule(15000, { self.desactivar() })
-        }
-    }
-
-    method cicloDeQuemadura() {
-        if (activo) {
-            robotRojo.seQuema()
-            game.schedule(2000, { self.cicloDeQuemadura() })
-        }
-    }
-
-    method desactivar() {
-        activo = false
-        game.removeVisual(self)
-    }
-}
-*/
 object sobrecalentamientoRojo {
     var property  posicion = game.at(3, 0) // Ajustá según tu pantalla
+    
     var activo = false
 
     method position() = posicion 
@@ -74,20 +14,19 @@ object sobrecalentamientoRojo {
         if (!activo) {
             activo = true
             game.addVisual(self)
+            efectoQuemaduraR.activar()
             self.cicloDeQuemadura()
-            game.schedule(20000, { self.desactivar() })
+            game.schedule(15000, { self.desactivar() })
         }
     }
 
     method cicloDeQuemadura() {
-        if (activo) {
-            const sonidoQuemadura = game.sound("sobrecalientamiento.mp3")
-            sonidoQuemadura.play()
+        if (activo) { 
             //game.say(robotAzul, "¡Quemado!")
             robotAzul.seQuema()
             game.schedule(2000, { 
             self.cicloDeQuemadura()
-            sonidoQuemadura.stop() })
+            })
     }
 }
 
@@ -108,8 +47,9 @@ object sobrecalentamientoAzul {
         if (!activo) {
             activo = true
             game.addVisual(self)
+            efectoQuemaduraA.activar()
             self.cicloDeQuemadura()
-            game.schedule(20000, { self.desactivar() })
+            game.schedule(15000, { self.desactivar() })
         }
     }
 
@@ -128,6 +68,50 @@ object sobrecalentamientoAzul {
     method desactivar() {
         activo = false
         game.removeVisual(self)
+    }
+}
+
+object efectoQuemaduraR {
+    var property posicion = game.at(22, 0)
+    var activo = false
+
+    method position() = posicion
+    method posicion(unaPosicion) {
+        posicion = unaPosicion
+    }
+    method image() = 'efectoQuemadoR.png'
+
+    method activar() {
+        if (!activo) {
+            activo = true
+            game.addVisual(self)
+            game.schedule(15000, {
+                game.removeVisual(self)
+                activo = false
+            })
+        }
+    }
+}
+
+object efectoQuemaduraA {
+    var property posicion = game.at(1, 0)
+    var activo = false
+
+    method position() = posicion
+    method posicion(unaPosicion) {
+        posicion = unaPosicion
+    }
+    method image() = 'efectoQuemadoA.png'
+
+    method activar() {
+        if (!activo) {
+            activo = true
+            game.addVisual(self)
+            game.schedule(15000, {
+                game.removeVisual(self)
+                activo = false
+            })
+        }
     }
 }
 

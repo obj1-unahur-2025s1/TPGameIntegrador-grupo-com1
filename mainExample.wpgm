@@ -1,7 +1,6 @@
 import wollok.game.*
 import juego.*
 
-
 program JuegoX {
 
     const anchoVentana = 1920
