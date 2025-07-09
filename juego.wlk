@@ -478,28 +478,30 @@ object pantallaHabilidadesAzul {
 
 
 object cronometro {
-    var tiempoRestante = 240  // 4 minutos en segundos
-    const posicion = game.at(16, 13)  // Ajustá según tu pantalla
-
+    var tiempoRestante = 120
+    var property imagenActual = "sec120.png"
+    const posicion = game.at(15, 12)  // Ajustá según tu pantalla
+    
     method position() = posicion
+    method image()=imagenActual   
     
-
-    method text() {
-        const minutos = (tiempoRestante / 60).truncate(0)
-        const segundos = (tiempoRestante % 60).truncate(0)
-        const conCero = if (segundos < 10) "0" + segundos.toString() else segundos.toString()
-        return minutos.toString() + ":" + conCero
-    }
-
-
-    method textColor() = paleta.rojo()
-    
+    method actualizarImagen() =
+        if (tiempoRestante >= 120) imagenActual = "sec120.png"
+        else if (tiempoRestante < 120 && tiempoRestante >= 105) imagenActual = "sec105.png"
+        else if (tiempoRestante < 105 && tiempoRestante >= 90) imagenActual = "sec90.png"
+        else if (tiempoRestante < 90 && tiempoRestante >= 60) imagenActual = "sec60.png"
+        else if (tiempoRestante < 60 && tiempoRestante >= 45) imagenActual = "sec45.png"
+        else if (tiempoRestante < 45 && tiempoRestante >= 30) imagenActual = "sec30.png"
+        else if (tiempoRestante < 30 && tiempoRestante >= 10) imagenActual = "sec15.png"
+        else imagenActual = "seg" + tiempoRestante + ".png"
 
     method disminuir() {
         if(!robotAzul.estaDerrotado() && !robotRojo.estaDerrotado() && !enPausa.pausa()) {
             if (tiempoRestante > 0) {
             tiempoRestante -= 1
+            self.actualizarImagen()
         }
+        self.actualizarImagen()
         if (tiempoRestante == 0) {
             game.sound("campanaFinal.mp3").play()
             //juego.finDelJuego()  // cuando se acaba el tiempo, termina la pelea
@@ -509,9 +511,11 @@ object cronometro {
     }
 
     method reiniciar() {
-        tiempoRestante = 240
+        tiempoRestante = 120
+        self.actualizarImagen()
     }
 }
+
 object marcadorRondas {
     var rondas = 0
     var rondasGanadasRojo = 0
