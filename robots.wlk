@@ -53,7 +53,8 @@ object robotRojo {
         //game.say(self, "Usando habilidad")
         habilidad.activar()
         puedeUsarHabilidad = false
-        game.schedule(60000, { puedeUsarHabilidad = true })  // 60 segundos = 1 minuto
+        game.schedule(45000, { puedeUsarHabilidad = true 
+        game.removeVisual(habilidad)})  
     } 
     /*
 else if (!puedeUsarHabilidad) {
@@ -136,9 +137,6 @@ else if (!puedeUsarHabilidad) {
             pasosPared = pasosPared - 1
         }
 }
-
-    method mensajeTest() = "Te golpe"
-    method mensajeTest1() = "Hay algo en la proxima posicion der"
     
 
     method bajarSalud(){
@@ -245,7 +243,8 @@ object robotAzul {
         //game.say(self, "Usando habilidad")
         habilidad.activar()
         puedeUsarHabilidad = false
-        game.schedule(60000, { puedeUsarHabilidad = true })  // 60 segundos = 1 minuto
+        game.schedule(45000, { puedeUsarHabilidad = true 
+        game.removeVisual(habilidad)})  // 60 segundos = 1 minuto
     } /*
     else if (!puedeUsarHabilidad) {
         game.say(self, "Habilidad en enfriamiento... esperá un toque")
@@ -349,7 +348,6 @@ object robotAzul {
         game.schedule(2000, { 
             sonidoQuemadura.stop()
         })
-        
         // vidaAzul.salud(salud) // Actualiza la salud en el objeto de
     }
 

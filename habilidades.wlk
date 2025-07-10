@@ -8,7 +8,7 @@ object sobrecalentamientoRojo {
     var activo = false
 
     method position() = posicion 
-    method image() = if(robotRojo.puedeUsarHabilidad()) "habilidadDisR.png" else "rojoculdown3cuarto.png"
+    method image() = "rojoculdown3cuarto.png"
 
     method activar() {
         if (!activo) {
@@ -40,7 +40,7 @@ object sobrecalentamientoAzul {
     var activo = false
 
     method position() = posicion 
-    method image() = if(robotAzul.puedeUsarHabilidad()) "habilidadDisA.png" else "azulculdown.png"
+    method image() = "azulculdown.png"
 
     method activar() {
         if (!activo) {
@@ -124,12 +124,13 @@ object oxidacionR {
     var activo = false
 
     method position() = posicion 
-    method image() = if(robotAzul.puedeUsarHabilidad()) "habilidadDisA.png" else "azulculdown.png"
+    method image() = "rojoculdown3cuarto.png"
 
     method activar() {
     if (!activo) {
         activo = true
         game.addVisual(self)
+        efectoOxidacionR.activar()
         robotAzul.seOxido()
         game.schedule(15000, {
             robotAzul.seLubrico()
@@ -147,12 +148,13 @@ object oxidacionA {
     
 
     method position() = posicion
-    method image() = if(robotAzul.puedeUsarHabilidad()) "habilidadDisA.png" else "azulculdown.png"
+    method image() = "azulculdown.png"
 
     method activar() {
     if (!activo) {
         activo = true
         game.addVisual(self)
+        efectoOxidacionA.activar()
         robotRojo.seOxido()
         game.schedule(15000, {
             robotRojo.seLubrico()
@@ -163,6 +165,51 @@ object oxidacionA {
     }
 }
 
+object efectoOxidacionR {
+    var property posicion = game.at(28, 12)
+    var activo = false
+
+    method position() = posicion
+    method posicion(unaPosicion) {
+        posicion = unaPosicion
+    }
+    method image() = 'efectoOxidoR.png'
+
+    method activar() {
+        if (!activo) {
+            activo = true
+            game.addVisual(self)
+            game.schedule(15000, {
+                game.removeVisual(self)
+                activo = false
+            })
+        }
+    }
+}
+
+object efectoOxidacionA {
+    var property posicion = game.at(1, 12)
+    var activo = false
+
+    method position() = posicion
+    method posicion(unaPosicion) {
+        posicion = unaPosicion
+    }
+    method image() = 'efectoOxidoA.png'
+
+    method activar() {
+        if (!activo) {
+            activo = true
+            game.addVisual(self)
+            game.schedule(15000, {
+                game.removeVisual(self)
+                activo = false
+            })
+        }
+    }
+}
+
+
 
 //-------------------------------------------------------------------------------------------
 
@@ -172,14 +219,20 @@ object cortoCircuitoR {
 
     method position() = posicion 
     method image() = imagen
-    var property imagen = if(robotRojo.puedeUsarHabilidad()) "habilidadDisR.png" else "rojoculdown3cuarto.png"
+    var property imagen = "rojoculdown3cuarto.png"
 
     method activar() {
         if (!activo) {
         activo = true
+        game.addVisual(self)
+        efectoCortoR.activar()
         robotAzul.seParalizo()
-        game.schedule(60000, { activo = false})
+        game.schedule(45000, { activo = false})
     }
+    }
+
+    method desactivar() {
+        activo = false
     }
 }
 
@@ -188,13 +241,62 @@ object cortoCircuitoA {
     var activo = false
 
     method position() = posicion 
-    method image() = if(robotAzul.puedeUsarHabilidad()) "habilidadDisA.png" else "azulculdown.png"
+    method image() = "azulculdown.png"
     method activar() {
         if (!activo) {
         activo = true
+        game.addVisual(self)
+        efectoCortoA.activar()
         robotRojo.seParalizo()
         game.schedule(60000, {activo = false})
     }
     }
+}
 
+object efectoCortoR {
+    var property posicion = game.at(28, 12)
+    var activo = false
+
+    method position() = posicion
+    method posicion(unaPosicion) {
+        posicion = unaPosicion
+    }
+    method image() = 'efectoCortoR.png'
+
+    method activar() {
+        if (!activo) {
+            activo = true
+            game.addVisual(self)
+            game.schedule(15000, {
+                game.removeVisual(self)
+                activo = false
+            })
+        }
+    }
+
+    method desactivar() {
+        activo = false
+    }
+}
+
+object efectoCortoA {
+    var property posicion = game.at(1, 12)
+    var activo = false
+
+    method position() = posicion
+    method posicion(unaPosicion) {
+        posicion = unaPosicion
+    }
+    method image() = 'efectoCortoA.png'
+
+    method activar() {
+        if (!activo) {
+            activo = true
+            game.addVisual(self)
+            game.schedule(15000, {
+                game.removeVisual(self)
+                activo = false
+            })
+        }
+    }
 }
